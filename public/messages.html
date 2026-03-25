@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages • SewaSathi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',sans-serif; background:#f4f6fb; min-height:100vh; }
+        nav { background:linear-gradient(135deg,#667eea,#764ba2); padding:0 30px; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.2); }
+        .nav-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+        .nav-brand img { height:42px; width:auto; border-radius:6px; }
+        .nav-brand-text .name { color:white; font-size:1.3rem; font-weight:700; display:block; line-height:1.1; }
+        .nav-brand-text .slogan { color:rgba(255,255,255,0.8); font-size:0.65rem; font-style:italic; display:block; }
+        #navLinks a, #navLinks span { color:rgba(255,255,255,0.9); text-decoration:none; margin-left:20px; font-size:0.95rem; }
+        .hero { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:38px 30px; }
+        .hero h1 { font-size:1.9rem; margin-bottom:6px; }
+        .container { max-width:860px; margin:0 auto; padding:30px 20px; }
+        .msg-card { background:white; border-radius:16px; padding:24px; box-shadow:0 4px 15px rgba(0,0,0,0.07); margin-bottom:18px; border-left:5px solid #667eea; transition:transform 0.2s; }
+        .msg-card:hover { transform:translateY(-2px); }
+        .msg-card.unread { border-left-color:#e74c3c; background:#fff9f9; }
+        .msg-card.confirmed { border-left-color:#27ae60; }
+        .msg-card.cancelled { border-left-color:#e74c3c; }
+        .msg-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
+        .msg-from { font-weight:700; color:#333; font-size:1.05rem; }
+        .msg-time { color:#aaa; font-size:0.82rem; }
+        .msg-type-badge { padding:4px 12px; border-radius:20px; font-size:0.78rem; font-weight:700; text-transform:uppercase; }
+        .badge-booking_request { background:#fff3cd; color:#856404; }
+        .badge-booking_confirmation { background:#d4edda; color:#155724; }
+        .badge-booking_cancelled { background:#f8d7da; color:#721c24; }
+        .badge-general { background:#d1ecf1; color:#0c5460; }
+        .msg-body { color:#555; font-size:0.97rem; line-height:1.6; margin-bottom:14px; }
+        .msg-actions { display:flex; gap:10px; flex-wrap:wrap; }
+        .btn { padding:9px 18px; border-radius:10px; font-size:0.88rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+        .btn-confirm { background:linear-gradient(135deg,#27ae60,#2ecc71); color:white; }
+        .btn-confirm:hover { opacity:0.9; }
+        .btn-decline { background:#f8d7da; color:#721c24; }
+        .btn-decline:hover { background:#e74c3c; color:white; }
+        .btn-read { background:#f0f0f0; color:#666; }
+        .btn-read:hover { background:#ddd; }
+        .unread-dot { display:inline-block; width:10px; height:10px; background:#e74c3c; border-radius:50%; margin-left:8px; vertical-align:middle; }
+        .empty-state { text-align:center; padding:70px 20px; color:#aaa; }
+        .empty-state i { font-size:3.5rem; margin-bottom:18px; display:block; color:#ddd; }
+        .empty-state h3 { font-size:1.3rem; color:#bbb; margin-bottom:10px; }
+        .loading { text-align:center; padding:60px; color:#667eea; font-size:1.8rem; }
+        .section-header { display:flex; align-items:center; gap:10px; margin-bottom:24px; }
+        .section-header h2 { font-size:1.4rem; color:#333; }
+        .badge-count { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:2px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
+        .alert { position:fixed; top:80px; right:20px; padding:14px 20px; border-radius:10px; display:none; font-size:0.95rem; z-index:999; box-shadow:0 4px 15px rgba(0,0,0,0.15); max-width:340px; }
+        .alert-error { background:#fff0f0; color:#cc0000; border:1px solid #ffcccc; }
+        .alert-success { background:#f0fff0; color:#006600; border:1px solid #aaddaa; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="index.html" class="nav-brand">
+        <img src="logo.jpeg" alt="SewaSathi">
+        <div class="nav-brand-text">
+            <span class="name">SewaSathi</span>
+            <span class="slogan">मात्र एक कलमा, सेवा घर घरमा</span>
+        </div>
+    </a>
+    <div id="navLinks"></div>
+</nav>
+<div id="alertMessage" class="alert"></div>
+
+<div class="hero">
+    <div style="max-width:860px;margin:0 auto;">
+        <h1><i class="fas fa-envelope"></i> Messages</h1>
+        <p id="heroSub" style="opacity:0.85;margin-top:6px;"></p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="section-header">
+        <h2>Inbox</h2>
+        <span class="badge-count" id="unreadCount">0 unread</span>
+    </div>
+    <div id="messagesList">
+        <div class="loading"><i class="fas fa-circle-notch fa-spin"></i></div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+if (!isLoggedIn()) {
+    window.location.href = 'login.html';
+}
+
+const user = getUser();
+
+// Set subtitle
+document.getElementById('heroSub').textContent = user.role === 'worker'
+    ? 'View booking requests from customers'
+    : 'View booking confirmations and updates';
+
+async function loadMessages() {
+    try {
+        const endpoint = user.role === 'worker' ? '/bookings/messages' : '/bookings/customer-messages';
+        const { ok, data } = await apiCall('GET', endpoint);
+
+        if (!ok || !data.success) {
+            document.getElementById('messagesList').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-circle"></i><h3>Could not load messages</h3><p>${data?.message || 'Server error'}</p></div>`;
+            return;
+        }
+
+        const messages = data.data;
+        const unread = messages.filter(m => !m.isRead).length;
+        document.getElementById('unreadCount').textContent = `${unread} unread`;
+
+        if (messages.length === 0) {
+            document.getElementById('messagesList').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No messages yet</h3>
+                    <p>${user.role === 'worker' ? 'Booking requests from customers will appear here.' : 'Booking confirmations will appear here.'}</p>
+                </div>`;
+            return;
+        }
+
+        document.getElementById('messagesList').innerHTML = messages.map(m => {
+            const typeClass = m.type || 'general';
+            const isUnread = !m.isRead;
+            const timeAgo = formatTime(m.createdAt);
+            const senderName = m.sender?.name || 'Unknown';
+            const bookingDate = m.booking?.bookingDate ? new Date(m.booking.bookingDate).toLocaleDateString('en-NP') : '';
+            const bookingStatus = m.booking?.status || '';
+
+            let actions = '';
+            if (user.role === 'worker' && m.type === 'booking_request' && m.booking?._id && bookingStatus === 'pending') {
+                actions = `
+                    <button class="btn btn-confirm" onclick="updateStatus('${m.booking._id}','confirmed','${m._id}',this)">
+                        <i class="fas fa-check"></i> Accept
+                    </button>
+                    <button class="btn btn-decline" onclick="updateStatus('${m.booking._id}','cancelled','${m._id}',this)">
+                        <i class="fas fa-times"></i> Decline
+                    </button>`;
+            }
+            if (isUnread) {
+                actions += `<button class="btn btn-read" onclick="markRead('${m._id}',this)"><i class="fas fa-check-double"></i> Mark Read</button>`;
+            }
+
+            const statusBadge = bookingStatus ? `<span style="font-size:0.78rem;padding:3px 10px;border-radius:20px;background:${bookingStatus==='confirmed'?'#d4edda':bookingStatus==='cancelled'?'#f8d7da':'#fff3cd'};color:${bookingStatus==='confirmed'?'#155724':bookingStatus==='cancelled'?'#721c24':'#856404'};font-weight:700;margin-left:8px;">${bookingStatus.toUpperCase()}</span>` : '';
+
+            return `
+                <div class="msg-card ${isUnread?'unread':''} ${typeClass}" id="msg-${m._id}">
+                    <div class="msg-header">
+                        <div>
+                            <span class="msg-from">
+                                <i class="fas fa-user-circle"></i> ${senderName}
+                                ${isUnread ? '<span class="unread-dot"></span>' : ''}
+                            </span>
+                            ${statusBadge}
+                            <div style="margin-top:4px;">
+                                <span class="msg-type-badge badge-${typeClass}">${typeClass.replace('_',' ')}</span>
+                                ${bookingDate ? `<span style="color:#aaa;font-size:0.82rem;margin-left:8px;"><i class="fas fa-calendar"></i> ${bookingDate}</span>` : ''}
+                            </div>
+                        </div>
+                        <span class="msg-time">${timeAgo}</span>
+                    </div>
+                    <div class="msg-body">${m.message}</div>
+                    ${actions ? `<div class="msg-actions">${actions}</div>` : ''}
+                </div>`;
+        }).join('');
+
+    } catch(e) {
+        document.getElementById('messagesList').innerHTML = `<div class="empty-state"><i class="fas fa-wifi"></i><h3>Connection Error</h3><p>Make sure the server is running on port 5000.</p></div>`;
+    }
+}
+
+async function updateStatus(bookingId, status, msgId, btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    try {
+        const { ok, data } = await apiCall('PUT', `/bookings/${bookingId}/status`, { status });
+        if (ok && data.success) {
+            showAlert(`Booking ${status} successfully! Customer has been notified.`, 'success');
+            setTimeout(loadMessages, 1200);
+        } else {
+            showAlert(data.message || 'Failed to update booking.', 'error');
+            btn.disabled = false;
+        }
+    } catch(e) {
+        showAlert('Server error. Please try again.', 'error');
+        btn.disabled = false;
+    }
+}
+
+async function markRead(msgId, btn) {
+    try {
+        await apiCall('PUT', `/bookings/messages/${msgId}/read`);
+        const card = document.getElementById('msg-' + msgId);
+        if (card) card.classList.remove('unread');
+        btn.remove();
+        // Update unread count
+        const unread = document.querySelectorAll('.msg-card.unread').length;
+        document.getElementById('unreadCount').textContent = `${unread} unread`;
+    } catch(e) {}
+}
+
+function formatTime(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diff = Math.floor((now - d) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+    return d.toLocaleDateString('en-NP');
+}
+
+loadMessages();
+</script>
+</body>
+</html>

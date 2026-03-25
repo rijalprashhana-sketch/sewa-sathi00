@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services • SewaSathi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',sans-serif; background:#f4f6fb; }
+        nav { background:linear-gradient(135deg,#667eea,#764ba2); padding:0 30px; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.2); }
+        .nav-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+        .nav-brand img { height:42px; width:auto; border-radius:6px; }
+        .nav-brand-text .name { color:white; font-size:1.3rem; font-weight:700; display:block; line-height:1.1; }
+        .nav-brand-text .slogan { color:rgba(255,255,255,0.8); font-size:0.65rem; font-style:italic; display:block; }
+        #navLinks a, #navLinks span { color:rgba(255,255,255,0.9); text-decoration:none; margin-left:20px; font-size:0.95rem; }
+        .page-header { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:55px 30px; text-align:center; }
+        .page-header h1 { font-size:2.3rem; margin-bottom:10px; }
+        .container { max-width:1200px; margin:0 auto; padding:40px 20px; }
+        .categories { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:18px; margin-bottom:40px; }
+        .cat-card { background:white; border-radius:14px; padding:24px 16px; text-align:center; cursor:pointer; transition:all 0.25s; box-shadow:0 4px 12px rgba(0,0,0,0.07); border:2px solid transparent; }
+        .cat-card:hover, .cat-card.active { transform:translateY(-5px); box-shadow:0 10px 28px rgba(102,126,234,0.22); border-color:#667eea; }
+        .cat-icon { width:68px; height:68px; background:linear-gradient(135deg,rgba(102,126,234,0.1),rgba(118,75,162,0.1)); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:1.7rem; color:#667eea; transition:all 0.25s; }
+        .cat-card:hover .cat-icon, .cat-card.active .cat-icon { background:linear-gradient(135deg,#667eea,#764ba2); color:white; }
+        .cat-card h3 { font-size:1rem; color:#333; margin-bottom:4px; }
+        .cat-card p { color:#888; font-size:0.8rem; }
+        .workers-section { background:white; border-radius:18px; padding:28px; box-shadow:0 4px 15px rgba(0,0,0,0.07); }
+        .workers-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:22px; }
+        .worker-card { border:2px solid #eee; border-radius:14px; padding:22px; transition:all 0.25s; }
+        .worker-card:hover { border-color:#667eea; box-shadow:0 8px 24px rgba(102,126,234,0.13); transform:translateY(-4px); }
+        .worker-avatar { width:68px; height:68px; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; color:white; font-size:1.7rem; font-weight:700; }
+        .worker-name { text-align:center; font-size:1.1rem; font-weight:600; color:#333; margin-bottom:4px; }
+        .worker-meta { text-align:center; color:#888; font-size:0.85rem; margin-bottom:10px; }
+        .worker-stats { display:flex; justify-content:space-around; padding:10px 0; border-top:1px solid #eee; border-bottom:1px solid #eee; margin:12px 0; }
+        .stat-item { text-align:center; }
+        .stat-val { font-size:1rem; font-weight:700; color:#333; }
+        .stat-lbl { font-size:0.75rem; color:#aaa; }
+        .stars { color:#ffc107; font-size:0.85rem; text-align:center; margin-bottom:10px; }
+        .worker-actions { display:flex; gap:10px; }
+        .btn { flex:1; padding:10px; border-radius:10px; font-size:0.9rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; text-align:center; text-decoration:none; }
+        .btn-primary { background:linear-gradient(135deg,#667eea,#764ba2); color:white; }
+        .btn-primary:hover { opacity:0.9; transform:translateY(-1px); }
+        .btn-outline { background:white; color:#667eea; border:2px solid #667eea; }
+        .btn-outline:hover { background:#667eea; color:white; }
+        .empty { text-align:center; padding:60px 20px; color:#aaa; grid-column:1/-1; }
+        .empty i { font-size:3rem; margin-bottom:14px; display:block; }
+        .loading { text-align:center; padding:60px; color:#667eea; grid-column:1/-1; font-size:2rem; }
+        .alert { position:fixed; top:80px; right:20px; padding:14px 20px; border-radius:10px; display:none; font-size:0.95rem; z-index:999; box-shadow:0 4px 15px rgba(0,0,0,0.15); max-width:340px; }
+        .alert-error { background:#fff0f0; color:#cc0000; border:1px solid #ffcccc; }
+        .alert-success { background:#f0fff0; color:#006600; border:1px solid #aaddaa; }
+        /* Booking Modal */
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2000; align-items:center; justify-content:center; }
+        .modal-overlay.show { display:flex; }
+        .modal-box { background:white; border-radius:20px; padding:32px; width:90%; max-width:480px; position:relative; max-height:90vh; overflow-y:auto; }
+        .modal-close { position:absolute; top:16px; right:18px; font-size:1.5rem; cursor:pointer; color:#aaa; background:none; border:none; }
+        .modal-close:hover { color:#333; }
+        .modal-title { font-size:1.4rem; font-weight:700; color:#333; margin-bottom:6px; }
+        .modal-worker { color:#667eea; font-size:0.95rem; margin-bottom:22px; }
+        .form-group { margin-bottom:18px; }
+        .form-group label { display:block; font-size:0.88rem; font-weight:600; color:#555; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.4px; }
+        .form-group input, .form-group textarea, .form-group select { width:100%; padding:11px 14px; border:2px solid #e0e0e0; border-radius:10px; font-size:0.95rem; transition:border-color 0.2s; background:white; font-family:inherit; }
+        .form-group input:focus, .form-group textarea:focus { border-color:#667eea; outline:none; }
+        .price-box { background:linear-gradient(135deg,rgba(102,126,234,0.08),rgba(118,75,162,0.08)); border-radius:12px; padding:16px 20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; }
+        .price-box .label { color:#666; font-size:0.9rem; }
+        .price-box .amount { font-size:1.4rem; font-weight:700; color:#667eea; }
+        .submit-btn { width:100%; padding:14px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; transition:opacity 0.2s; }
+        .submit-btn:hover { opacity:0.9; }
+        .submit-btn:disabled { opacity:0.6; cursor:not-allowed; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="index.html" class="nav-brand">
+        <img src="logo.jpeg" alt="SewaSathi">
+        <div class="nav-brand-text">
+            <span class="name">SewaSathi</span>
+            <span class="slogan">मात्र एक कलमा, सेवा घर घरमा</span>
+        </div>
+    </a>
+    <div id="navLinks"></div>
+</nav>
+
+<div id="alertMessage" class="alert"></div>
+
+<div class="page-header">
+    <h1>Our Professional Services</h1>
+    <p>Choose from verified and trusted service providers across Nepal</p>
+</div>
+
+<div class="container">
+    <div class="categories" id="categories"></div>
+    <div class="workers-section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+            <h2 style="font-size:1.4rem;color:#333;">Available <span id="categoryLabel" style="color:#667eea;">Professionals</span></h2>
+        </div>
+        <div class="workers-grid" id="workersGrid">
+            <div class="loading"><i class="fas fa-circle-notch fa-spin"></i></div>
+        </div>
+    </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal-overlay" id="bookingModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div class="modal-title">Book Service</div>
+        <div class="modal-worker" id="modalWorkerInfo"></div>
+        <div class="form-group">
+            <label>Date *</label>
+            <input type="date" id="bDate" required>
+        </div>
+        <div class="form-group">
+            <label>Time Slot *</label>
+            <select id="bTime" required>
+                <option value="">Choose time</option>
+                <option value="Morning (9 AM – 12 PM)">Morning (9 AM – 12 PM)</option>
+                <option value="Afternoon (12 PM – 3 PM)">Afternoon (12 PM – 3 PM)</option>
+                <option value="Evening (3 PM – 6 PM)">Evening (3 PM – 6 PM)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Your Address *</label>
+            <textarea id="bAddress" rows="2" placeholder="Enter your full address..." required></textarea>
+        </div>
+        <div class="form-group">
+            <label>Notes (Optional)</label>
+            <textarea id="bNotes" rows="2" placeholder="Describe the problem or any special requests..."></textarea>
+        </div>
+        <div class="price-box">
+            <div class="label">Estimated Cost</div>
+            <div class="amount">Rs. <span id="bPrice">—</span>/hr</div>
+        </div>
+        <button class="submit-btn" id="bSubmitBtn" onclick="submitBooking()">
+            <i class="fas fa-calendar-check"></i> Confirm Booking
+        </button>
+    </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+const CATEGORIES = [
+    { id:'plumbing',   name:'Plumbers',      icon:'wrench',       desc:'Pipe fitting, leak repair' },
+    { id:'electrical', name:'Electricians',  icon:'bolt',         desc:'Wiring, fan, AC, sockets' },
+    { id:'painting',   name:'Painters',      icon:'paint-brush',  desc:'Wall & texture painting' },
+    { id:'cleaning',   name:'Housemaids',    icon:'broom',        desc:'Deep cleaning, kitchen' },
+    { id:'carpentry',  name:'Carpenters',    icon:'hammer',       desc:'Furniture, woodwork' },
+    { id:'health',     name:'Health',        icon:'stethoscope',  desc:'Doctors, nurses, caregivers' },
+    { id:'other',      name:'Others',        icon:'screwdriver',  desc:'Drivers, tutors & more' }
+];
+
+let allWorkers = [];
+let activeCategory = 'plumbing';
+let selectedWorker = null;
+
+// Read category from URL
+const urlCat = new URLSearchParams(window.location.search).get('category');
+if (urlCat) activeCategory = urlCat;
+
+function renderCategories() {
+    document.getElementById('categories').innerHTML = CATEGORIES.map(c => `
+        <div class="cat-card ${c.id === activeCategory ? 'active' : ''}" onclick="selectCategory('${c.id}', this)">
+            <div class="cat-icon"><i class="fas fa-${c.icon}"></i></div>
+            <h3>${c.name}</h3>
+            <p>${c.desc}</p>
+        </div>
+    `).join('');
+}
+
+function selectCategory(id, el) {
+    activeCategory = id;
+    document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    const cat = CATEGORIES.find(c => c.id === id);
+    document.getElementById('categoryLabel').textContent = cat ? cat.name : 'Professionals';
+    renderWorkers();
+}
+
+function stars(rating) {
+    const full = Math.floor(rating);
+    const half = rating % 1 >= 0.5;
+    let s = '';
+    for(let i=0;i<full;i++) s += '<i class="fas fa-star"></i>';
+    if(half) s += '<i class="fas fa-star-half-alt"></i>';
+    for(let i=0;i<5-Math.ceil(rating);i++) s += '<i class="far fa-star"></i>';
+    return s + ` <span style="color:#888">${rating.toFixed(1)}</span>`;
+}
+
+function renderWorkers() {
+    const grid = document.getElementById('workersGrid');
+    const list = allWorkers.filter(w => {
+        if (w.category) return w.category === activeCategory;
+        const prof = (w.profession || '').toLowerCase();
+        const profMap = {
+            plumbing:['plumb','pipe'], electrical:['electr','wiring','ac mechanic'],
+            painting:['paint'], cleaning:['clean','maid','cook','garden'],
+            carpentry:['carpen','wood','weld'], health:['doctor','nurse','physio','caregiv'],
+            other:['driver','guard','tutor','security']
+        };
+        return (profMap[activeCategory] || [activeCategory]).some(kw => prof.includes(kw));
+    });
+    if (list.length === 0) {
+        grid.innerHTML = `<div class="empty"><i class="fas fa-user-slash"></i>No ${CATEGORIES.find(c=>c.id===activeCategory)?.name || 'workers'} found yet.<br><br>Register as a worker to be listed here!</div>`;
+        return;
+    }
+    grid.innerHTML = list.map(w => `
+        <div class="worker-card">
+            <div class="worker-avatar">${w.name.charAt(0).toUpperCase()}</div>
+            <div class="worker-name">${w.name}</div>
+            <div class="worker-meta"><i class="fas fa-map-marker-alt"></i> ${w.city||'Nepal'} &nbsp;|&nbsp; ${w.profession||'Professional'}</div>
+            <div class="stars">${stars(w.rating||0)}</div>
+            <div class="worker-stats">
+                <div class="stat-item"><div class="stat-val">Rs.${w.hourlyRate||'—'}</div><div class="stat-lbl">Per hour</div></div>
+                <div class="stat-item"><div class="stat-val">${w.completedJobs||0}</div><div class="stat-lbl">Jobs done</div></div>
+                <div class="stat-item"><div class="stat-val">${w.experience||0}yr</div><div class="stat-lbl">Experience</div></div>
+            </div>
+            <div class="worker-actions">
+                <button class="btn btn-outline" onclick="callWorker('${w.phone||''}','${w.name}')"><i class="fas fa-phone"></i> Call</button>
+                <button class="btn btn-primary" onclick="openBooking('${w._id}','${w.name}','${w.profession||'Professional'}',${w.hourlyRate||0})"><i class="fas fa-calendar-check"></i> Book</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function callWorker(phone, name) {
+    if (!phone) { showAlert(name + ' has no phone number listed.', 'error'); return; }
+    window.location.href = 'tel:' + phone;
+}
+
+function openBooking(workerId, workerName, profession, hourlyRate) {
+    if (!isLoggedIn()) {
+        showAlert('Please login to book a service.', 'error');
+        setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+        return;
+    }
+    const user = getUser();
+    if (user.role === 'worker') {
+        showAlert('Workers cannot book services. Please use a customer account.', 'error');
+        return;
+    }
+    selectedWorker = { workerId, workerName, profession, hourlyRate };
+    document.getElementById('modalWorkerInfo').innerHTML = `<i class="fas fa-user-tie"></i> Booking: <strong>${workerName}</strong> — ${profession}`;
+    document.getElementById('bPrice').textContent = hourlyRate || '—';
+    // Set min date to today
+    document.getElementById('bDate').min = new Date().toISOString().split('T')[0];
+    document.getElementById('bDate').value = '';
+    document.getElementById('bTime').value = '';
+    document.getElementById('bAddress').value = '';
+    document.getElementById('bNotes').value = '';
+    document.getElementById('bookingModal').classList.add('show');
+}
+
+function closeModal() {
+    document.getElementById('bookingModal').classList.remove('show');
+    selectedWorker = null;
+}
+
+document.getElementById('bookingModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+async function submitBooking() {
+    if (!selectedWorker) return;
+    const date = document.getElementById('bDate').value;
+    const timeSlot = document.getElementById('bTime').value;
+    const address = document.getElementById('bAddress').value.trim();
+    const notes = document.getElementById('bNotes').value.trim();
+
+    if (!date) { showAlert('Please select a date.', 'error'); return; }
+    if (!timeSlot) { showAlert('Please select a time slot.', 'error'); return; }
+    if (!address) { showAlert('Please enter your address.', 'error'); return; }
+
+    const btn = document.getElementById('bSubmitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+    try {
+        const { ok, data } = await apiCall('POST', '/bookings', {
+            workerId: selectedWorker.workerId,
+            serviceType: selectedWorker.profession,
+            bookingDate: date,
+            address: address + (timeSlot ? ' | Time: ' + timeSlot : ''),
+            notes: notes,
+            amount: selectedWorker.hourlyRate
+        });
+        if (ok && data.success) {
+            closeModal();
+            showAlert('Booking request sent to ' + selectedWorker.workerName + '! They will be notified.', 'success');
+        } else {
+            showAlert(data.message || 'Booking failed. Please try again.', 'error');
+        }
+    } catch(e) {
+        showAlert('Could not reach server. Please try again.', 'error');
+    }
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-calendar-check"></i> Confirm Booking';
+}
+
+async function loadWorkers() {
+    document.getElementById('workersGrid').innerHTML = '<div class="loading"><i class="fas fa-circle-notch fa-spin"></i></div>';
+    try {
+        const { ok, data } = await apiCall('GET', '/workers');
+        allWorkers = (ok && data.success) ? data.data : [];
+    } catch(e) { allWorkers = []; }
+    renderWorkers();
+}
+
+renderCategories();
+loadWorkers();
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard • SewaSathi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',sans-serif; background:#f4f6fb; min-height:100vh; }
+        nav { background:linear-gradient(135deg,#667eea,#764ba2); padding:0 30px; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.2); }
+        .nav-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+        .nav-brand img { height:42px; width:auto; border-radius:6px; }
+        .nav-brand-text .name { color:white; font-size:1.3rem; font-weight:700; display:block; line-height:1.1; }
+        .nav-brand-text .slogan { color:rgba(255,255,255,0.8); font-size:0.65rem; font-style:italic; display:block; }
+        #navLinks a, #navLinks span { color:rgba(255,255,255,0.9); text-decoration:none; margin-left:20px; font-size:0.95rem; }
+        .hero { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:38px 30px; }
+        .container { max-width:1100px; margin:0 auto; padding:28px 20px; }
+        .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:18px; margin-bottom:28px; }
+        .stat-card { background:white; border-radius:16px; padding:22px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.07); cursor:pointer; transition:transform 0.2s; }
+        .stat-card:hover { transform:translateY(-3px); }
+        .stat-card .number { font-size:2.3rem; font-weight:700; color:#667eea; margin:8px 0 4px; }
+        .stat-card h3 { color:#555; font-size:0.9rem; font-weight:500; }
+        .stat-card .icon { font-size:1.5rem; color:#764ba2; opacity:0.5; }
+        .section { background:white; border-radius:16px; padding:26px; box-shadow:0 4px 15px rgba(0,0,0,0.07); margin-bottom:22px; }
+        .section h2 { font-size:1.2rem; color:#333; margin-bottom:18px; padding-bottom:12px; border-bottom:2px solid #f0f0f0; }
+        .profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        @media(max-width:600px){ .profile-grid { grid-template-columns:1fr; } }
+        .profile-item { background:#f8f9fa; border-radius:10px; padding:13px; }
+        .profile-item .label { font-size:0.78rem; color:#888; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+        .profile-item .value { font-size:0.97rem; color:#333; font-weight:500; }
+        .badge { display:inline-block; padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:600; }
+        .badge-customer { background:#e3f2fd; color:#1565c0; }
+        .badge-worker { background:#f3e5f5; color:#6a1b9a; }
+        .booking-item { display:flex; justify-content:space-between; align-items:center; padding:14px; border:1px solid #eee; border-radius:10px; margin-bottom:10px; flex-wrap:wrap; gap:10px; }
+        .booking-info strong { display:block; font-size:0.97rem; color:#333; }
+        .booking-info small { color:#888; font-size:0.83rem; }
+        .status-badge { padding:5px 12px; border-radius:20px; font-size:0.8rem; font-weight:600; }
+        .status-pending { background:#fff3cd; color:#856404; }
+        .status-confirmed { background:#d1ecf1; color:#0c5460; }
+        .status-completed { background:#d4edda; color:#155724; }
+        .status-cancelled { background:#f8d7da; color:#721c24; }
+        .no-bookings { text-align:center; padding:40px; color:#aaa; }
+        .no-bookings i { font-size:3rem; margin-bottom:14px; display:block; }
+        .btn { display:inline-block; padding:10px 22px; border-radius:10px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; text-decoration:none; font-weight:600; font-size:0.9rem; border:none; cursor:pointer; }
+        .btn:hover { opacity:0.9; }
+        .btn-msg { background:linear-gradient(135deg,#e74c3c,#c0392b); }
+        .quick-actions { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:22px; }
+        .quick-btn { display:flex; align-items:center; gap:8px; padding:13px 20px; background:white; border-radius:14px; box-shadow:0 4px 15px rgba(0,0,0,0.07); text-decoration:none; color:#333; font-weight:600; transition:all 0.2s; border:2px solid transparent; }
+        .quick-btn:hover { border-color:#667eea; color:#667eea; transform:translateY(-2px); }
+        .quick-btn i { color:#667eea; font-size:1.2rem; }
+        .msg-preview { padding:14px; border:1px solid #eee; border-radius:10px; margin-bottom:10px; border-left:4px solid #667eea; }
+        .msg-preview.unread { border-left-color:#e74c3c; background:#fff9f9; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="index.html" class="nav-brand">
+        <img src="logo.jpeg" alt="SewaSathi">
+        <div class="nav-brand-text">
+            <span class="name">SewaSathi</span>
+            <span class="slogan">मात्र एक कलमा, सेवा घर घरमा</span>
+        </div>
+    </a>
+    <div id="navLinks"></div>
+</nav>
+
+<div class="hero">
+    <div style="max-width:1100px;margin:0 auto;">
+        <h1 id="welcomeMsg">Welcome!</h1>
+        <p id="welcomeSub" style="opacity:0.85;margin-top:6px;"></p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="stats">
+        <div class="stat-card">
+            <div class="icon"><i class="fas fa-calendar-check"></i></div>
+            <div class="number" id="totalBookings">—</div>
+            <h3>Total Bookings</h3>
+        </div>
+        <div class="stat-card">
+            <div class="icon"><i class="fas fa-check-circle"></i></div>
+            <div class="number" id="completedBookings">—</div>
+            <h3>Completed</h3>
+        </div>
+        <div class="stat-card">
+            <div class="icon"><i class="fas fa-clock"></i></div>
+            <div class="number" id="pendingBookings">—</div>
+            <h3>Pending</h3>
+        </div>
+        <div class="stat-card" onclick="window.location.href='messages.html'">
+            <div class="icon"><i class="fas fa-envelope"></i></div>
+            <div class="number" id="unreadMessages">—</div>
+            <h3>Unread Messages</h3>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <a href="services.html" class="quick-btn"><i class="fas fa-search"></i> Find Services</a>
+        <a href="messages.html" class="quick-btn"><i class="fas fa-envelope"></i> Messages</a>
+        <a href="#" onclick="logout()" class="quick-btn" style="color:#e74c3c;"><i class="fas fa-sign-out-alt" style="color:#e74c3c;"></i> Logout</a>
+    </div>
+
+    <div class="section" style="margin-bottom:22px;">
+        <h2><i class="fas fa-user" style="color:#667eea;margin-right:8px;"></i>My Profile</h2>
+        <div class="profile-grid" id="profileGrid"><p style="color:#aaa;">Loading...</p></div>
+    </div>
+
+    <div class="section">
+        <h2><i class="fas fa-calendar-check" style="color:#667eea;margin-right:8px;"></i>My Bookings</h2>
+        <div id="bookingsList"><div class="no-bookings"><i class="fas fa-circle-notch fa-spin"></i></div></div>
+        <div style="margin-top:18px;text-align:center;">
+            <a href="services.html" class="btn"><i class="fas fa-search"></i> Find Services</a>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+if (!isLoggedIn()) { window.location.href = 'login.html'; }
+
+const user = getUser();
+document.getElementById('welcomeMsg').textContent = 'Welcome, ' + user.name + '!';
+document.getElementById('welcomeSub').textContent = user.role === 'worker'
+    ? 'Worker Dashboard — manage your booking requests'
+    : 'Customer Dashboard — track your bookings';
+
+function renderProfile() {
+    const items = [
+        { label:'Full Name', value: user.name },
+        { label:'Email', value: user.email },
+        { label:'Phone', value: user.phone || '—' },
+        { label:'City', value: user.city || '—' },
+        { label:'Role', value: `<span class="badge badge-${user.role}">${user.role}</span>` },
+        { label:'Member Since', value: user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '—' }
+    ];
+    if (user.role === 'worker') {
+        items.push(
+            { label:'Profession', value: user.profession || '—' },
+            { label:'Experience', value: user.experience ? user.experience + ' years' : '—' },
+            { label:'Hourly Rate', value: user.hourlyRate ? 'Rs. ' + user.hourlyRate : '—' }
+        );
+    }
+    document.getElementById('profileGrid').innerHTML = items.map(item =>
+        `<div class="profile-item"><div class="label">${item.label}</div><div class="value">${item.value}</div></div>`
+    ).join('');
+}
+
+async function loadBookings() {
+    try {
+        const endpoint = user.role === 'worker' ? '/bookings/worker-bookings' : '/bookings/my';
+        const { ok, data } = await apiCall('GET', endpoint);
+        const bookings = (ok && data.success) ? data.data : [];
+
+        document.getElementById('totalBookings').textContent     = bookings.length;
+        document.getElementById('completedBookings').textContent = bookings.filter(b => b.status === 'completed').length;
+        document.getElementById('pendingBookings').textContent   = bookings.filter(b => b.status === 'pending').length;
+
+        const list = document.getElementById('bookingsList');
+        if (bookings.length === 0) {
+            list.innerHTML = `<div class="no-bookings"><i class="fas fa-calendar-times"></i>No bookings yet.<br><br><a href="services.html" class="btn" style="display:inline-block;margin-top:10px;">Find a Service</a></div>`;
+        } else {
+            list.innerHTML = bookings.map(b => {
+                const otherPerson = user.role === 'worker'
+                    ? (b.customerId?.name || 'Customer')
+                    : (b.workerId?.name || 'Worker');
+                const otherLabel = user.role === 'worker' ? 'Customer' : 'Worker';
+                return `
+                <div class="booking-item">
+                    <div class="booking-info">
+                        <strong><i class="fas fa-user"></i> ${otherLabel}: ${otherPerson}</strong>
+                        <small>${new Date(b.bookingDate).toLocaleDateString('en-NP')} ${b.address ? '| ' + b.address.substring(0,40) + (b.address.length>40?'...':'') : ''}</small>
+                        ${b.notes ? `<small style="display:block;color:#888;">Note: ${b.notes}</small>` : ''}
+                    </div>
+                    <span class="status-badge status-${b.status}">${b.status}</span>
+                </div>`;
+            }).join('');
+        }
+    } catch(err) {
+        document.getElementById('bookingsList').innerHTML = `<div class="no-bookings"><i class="fas fa-exclamation-circle"></i>Could not load bookings. Is the server running?</div>`;
+        document.getElementById('totalBookings').textContent = '0';
+        document.getElementById('completedBookings').textContent = '0';
+        document.getElementById('pendingBookings').textContent = '0';
+    }
+}
+
+async function loadUnreadMessages() {
+    try {
+        const endpoint = user.role === 'worker' ? '/bookings/messages' : '/bookings/customer-messages';
+        const { ok, data } = await apiCall('GET', endpoint);
+        if (ok && data.success) {
+            const unread = data.data.filter(m => !m.isRead).length;
+            document.getElementById('unreadMessages').textContent = unread;
+        } else {
+            document.getElementById('unreadMessages').textContent = '0';
+        }
+    } catch(e) {
+        document.getElementById('unreadMessages').textContent = '—';
+    }
+}
+
+renderProfile();
+loadBookings();
+loadUnreadMessages();
+</script>
+</body>
+</html>

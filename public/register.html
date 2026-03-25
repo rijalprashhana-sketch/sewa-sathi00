@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register • SewaSathi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#667eea,#764ba2); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+        .card { background:white; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); width:100%; max-width:520px; padding:40px; }
+        .logo { text-align:center; margin-bottom:30px; }
+        .logo i { font-size:2.5rem; color:#667eea; }
+        .logo h2 { font-size:1.8rem; color:#333; margin-top:10px; }
+        .logo p { color:#888; margin-top:5px; }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        @media(max-width:500px){ .form-row { grid-template-columns:1fr; } }
+        .form-group { margin-bottom:16px; position:relative; }
+        .form-group i.icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#667eea; }
+        .form-group input, .form-group select { width:100%; padding:13px 13px 13px 42px; border:2px solid #e0e0e0; border-radius:10px; font-size:0.95rem; transition:border-color 0.2s; background:white; }
+        .form-group input:focus, .form-group select:focus { border-color:#667eea; outline:none; }
+        .worker-fields { display:none; background:#f8f0ff; border-radius:12px; padding:16px; margin-bottom:16px; }
+        .worker-fields h4 { color:#764ba2; margin-bottom:12px; font-size:0.95rem; }
+        .btn { width:100%; padding:14px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; border-radius:10px; font-size:1.05rem; font-weight:600; cursor:pointer; margin-top:8px; transition:opacity 0.2s; }
+        .btn:hover { opacity:0.9; }
+        .btn:disabled { opacity:0.6; cursor:not-allowed; }
+        .links { text-align:center; margin-top:20px; color:#666; }
+        .links a { color:#667eea; text-decoration:none; font-weight:500; }
+        .links a:hover { text-decoration:underline; }
+        .alert { padding:12px 15px; border-radius:10px; margin-bottom:18px; display:none; font-size:0.95rem; }
+        .alert-error { background:#fff0f0; color:#cc0000; border:1px solid #ffcccc; }
+        .alert-success { background:#f0fff0; color:#006600; border:1px solid #aaddaa; }
+        .back { display:inline-block; margin-bottom:20px; color:#667eea; text-decoration:none; font-size:0.9rem; }
+        label.role-label { display:block; margin-bottom:6px; font-weight:600; color:#555; font-size:0.9rem; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <a href="index.html" class="back"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    <div class="logo">
+        <img src="logo.jpeg" alt="SewaSathi" style="height:64px;border-radius:10px;margin-bottom:8px;box-shadow:0 4px 12px rgba(102,126,234,0.2);">
+        <h2>Create Account</h2>
+        <p style="font-style:italic;color:#764ba2;font-size:0.85rem;">मात्र एक कलमा, सेवा घर घरमा</p>
+    </div>
+    <div id="alertMessage" class="alert"></div>
+    <form id="registerForm">
+        <div class="form-row">
+            <div class="form-group">
+                <i class="fas fa-user icon"></i>
+                <input type="text" name="name" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-phone icon"></i>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <i class="fas fa-envelope icon"></i>
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-city icon"></i>
+                <input type="text" name="city" placeholder="Your City" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" name="password" id="pw" placeholder="Password (min 6 chars)" required minlength="6">
+            </div>
+            <div class="form-group">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" name="confirmPassword" id="cpw" placeholder="Confirm Password" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="role-label">I want to:</label>
+            <div class="form-group" style="margin-bottom:0">
+                <i class="fas fa-user-tag icon"></i>
+                <select name="role" id="roleSelect" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="customer">Customer — I need services</option>
+                    <option value="worker">Worker — I provide services</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Worker-only fields -->
+        <div class="worker-fields" id="workerFields">
+            <h4><i class="fas fa-hard-hat"></i> Worker Details</h4>
+            <div class="form-group">
+                <i class="fas fa-briefcase icon"></i>
+                <select name="professionSelect" id="professionSelect">
+                    <option value="" disabled selected>Select your profession</option>
+                    <optgroup label="🔧 Technical">
+                        <option value="Plumber|plumbing">Plumber</option>
+                        <option value="Electrician|electrical">Electrician</option>
+                        <option value="Carpenter|carpentry">Carpenter</option>
+                        <option value="AC Mechanic|electrical">AC Mechanic</option>
+                        <option value="Welder|carpentry">Welder</option>
+                    </optgroup>
+                    <optgroup label="🏠 Home Services">
+                        <option value="Painter|painting">Painter</option>
+                        <option value="Housemaid|cleaning">Housemaid</option>
+                        <option value="Cleaner|cleaning">Cleaner</option>
+                        <option value="Cook|cleaning">Cook</option>
+                        <option value="Gardener|cleaning">Gardener</option>
+                    </optgroup>
+                    <optgroup label="🏥 Health">
+                        <option value="Doctor|health">Doctor</option>
+                        <option value="Nurse|health">Nurse</option>
+                        <option value="Physiotherapist|health">Physiotherapist</option>
+                        <option value="Caregiver|health">Caregiver</option>
+                    </optgroup>
+                    <optgroup label="📦 Other">
+                        <option value="Driver|other">Driver</option>
+                        <option value="Security Guard|other">Security Guard</option>
+                        <option value="Tutor|other">Tutor</option>
+                        <option value="Other|other">Other</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <i class="fas fa-calendar icon"></i>
+                    <input type="number" name="experience" id="experience" placeholder="Years of Experience" min="0">
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-rupee-sign icon"></i>
+                    <input type="number" name="hourlyRate" id="hourlyRate" placeholder="Hourly Rate (Rs.)" min="0">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn" id="registerBtn">
+            <i class="fas fa-user-plus"></i> Create Account
+        </button>
+    </form>
+    <div class="links">
+        Already have an account? <a href="login.html">Login here</a>
+    </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+    if (isLoggedIn()) window.location.href = 'dashboard.html';
+
+    // Show/hide worker fields
+    document.getElementById('roleSelect').addEventListener('change', function() {
+        const wf = document.getElementById('workerFields');
+        const inputs = wf.querySelectorAll('input, select');
+        if (this.value === 'worker') {
+            wf.style.display = 'block';
+            inputs.forEach(i => i.required = true);
+        } else {
+            wf.style.display = 'none';
+            inputs.forEach(i => i.required = false);
+        }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('registerBtn');
+
+        const pw  = document.getElementById('pw').value;
+        const cpw = document.getElementById('cpw').value;
+        if (pw !== cpw) { showAlert('Passwords do not match!', 'error'); return; }
+
+        const role = document.getElementById('roleSelect').value;
+        const body = {
+            name:     this.name.value.trim(),
+            phone:    this.phone.value.trim(),
+            email:    this.email.value.trim(),
+            city:     this.city.value.trim(),
+            password: pw,
+            role:     role
+        };
+
+        if (role === 'worker') {
+            const profVal = document.getElementById('professionSelect').value; // e.g. "Doctor|health"
+            if (!profVal) { showAlert('Please select your profession.', 'error'); return; }
+            const [profession, category] = profVal.split('|');
+            body.profession = profession;
+            body.category   = category;
+            body.experience = parseInt(document.getElementById('experience').value) || 0;
+            body.hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
+
+        try {
+            const { ok, data } = await apiCall('POST', '/auth/register', body);
+
+            if (ok && data.success) {
+                showAlert('Account created! Redirecting to login...', 'success');
+                setTimeout(() => { window.location.href = 'login.html'; }, 1800);
+            } else {
+                showAlert(data.message || 'Registration failed. Please try again.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+            }
+        } catch(err) {
+            showAlert('Cannot reach server. Make sure the backend is running on port 5000.', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+        }
+    });
+</script>
+</body>
+</html>

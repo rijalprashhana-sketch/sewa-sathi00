@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login • SewaSathi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#667eea,#764ba2); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+        .card { background:white; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); width:100%; max-width:440px; padding:40px; }
+        .logo { text-align:center; margin-bottom:30px; }
+        .logo i { font-size:3rem; color:#667eea; }
+        .logo h2 { font-size:1.8rem; color:#333; margin-top:10px; }
+        .logo p { color:#888; margin-top:5px; }
+        .form-group { margin-bottom:18px; position:relative; }
+        .form-group i.icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#667eea; }
+        .form-group input { width:100%; padding:14px 14px 14px 42px; border:2px solid #e0e0e0; border-radius:10px; font-size:1rem; transition:border-color 0.2s; }
+        .form-group input:focus { border-color:#667eea; outline:none; }
+        .btn { width:100%; padding:14px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; border-radius:10px; font-size:1.1rem; font-weight:600; cursor:pointer; margin-top:8px; transition:opacity 0.2s; }
+        .btn:hover { opacity:0.9; }
+        .btn:disabled { opacity:0.6; cursor:not-allowed; }
+        .links { text-align:center; margin-top:20px; color:#666; }
+        .links a { color:#667eea; text-decoration:none; font-weight:500; }
+        .links a:hover { text-decoration:underline; }
+        .alert { padding:12px 15px; border-radius:10px; margin-bottom:18px; display:none; font-size:0.95rem; }
+        .alert-error { background:#fff0f0; color:#cc0000; border:1px solid #ffcccc; }
+        .alert-success { background:#f0fff0; color:#006600; border:1px solid #aaddaa; }
+        .back { display:inline-block; margin-bottom:20px; color:#667eea; text-decoration:none; font-size:0.9rem; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <a href="index.html" class="back"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    <div class="logo">
+        <img src="logo.jpeg" alt="SewaSathi" style="height:64px;border-radius:10px;margin-bottom:8px;box-shadow:0 4px 12px rgba(102,126,234,0.2);">
+        <h2>Welcome Back!</h2>
+        <p style="font-style:italic;color:#764ba2;font-size:0.85rem;">मात्र एक कलमा, सेवा घर घरमा</p>
+    </div>
+    <div id="alertMessage" class="alert"></div>
+    <form id="loginForm">
+        <div class="form-group">
+            <i class="fas fa-envelope icon"></i>
+            <input type="email" name="email" placeholder="Email Address" required autocomplete="email">
+        </div>
+        <div class="form-group">
+            <i class="fas fa-lock icon"></i>
+            <input type="password" name="password" placeholder="Password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+    </form>
+    <div class="links">
+        Don't have an account? <a href="register.html">Sign up here</a>
+    </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+    // If already logged in, redirect
+    if (isLoggedIn()) window.location.href = 'dashboard.html';
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('loginBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+
+        const email    = this.email.value.trim();
+        const password = this.password.value;
+
+        try {
+            const { ok, data } = await apiCall('POST', '/auth/login', { email, password });
+
+            if (ok && data.success) {
+                // API returns: { success:true, data:{ user, token } }
+                saveAuth(data.data.token, data.data.user);
+                showAlert('Login successful! Redirecting...', 'success');
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+            } else {
+                showAlert(data.message || 'Invalid email or password.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+            }
+        } catch (err) {
+            showAlert('Cannot reach server. Make sure the backend is running on port 5000.', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        }
+    });
+</script>
+</body>
+</html>

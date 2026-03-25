@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SewaSathi – Nepal's Trusted Home Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root { --primary:#667eea; --secondary:#764ba2; --gradient:linear-gradient(135deg,#667eea,#764ba2); }
+        body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#333; line-height:1.6; overflow-x:hidden; }
+        .navbar { background:white; box-shadow:0 2px 20px rgba(0,0,0,0.1); position:fixed; top:0; left:0; right:0; z-index:1000; padding:10px 0; }
+        .nav-container { max-width:1200px; margin:0 auto; padding:0 20px; display:flex; justify-content:space-between; align-items:center; }
+        .logo-area { display:flex; align-items:center; gap:12px; text-decoration:none; }
+        .logo-area img { height:52px; width:auto; object-fit:contain; }
+        .logo-text { display:flex; flex-direction:column; }
+        .logo-name { font-size:1.5rem; font-weight:800; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.1; }
+        .logo-slogan { font-size:0.72rem; color:#764ba2; font-weight:600; letter-spacing:0.3px; font-style:italic; }
+        .nav-links { display:flex; gap:28px; align-items:center; }
+        .nav-links a { color:#333; text-decoration:none; font-weight:500; transition:color 0.2s; }
+        .nav-links a:hover { color:var(--primary); }
+        .nav-links .btn-nav { background:var(--gradient); color:white !important; padding:8px 20px; border-radius:25px; font-weight:600; }
+        .hero { min-height:100vh; display:flex; align-items:center; padding:100px 20px 50px; background:linear-gradient(135deg,#f5f7fa,#c3cfe2); }
+        .hero-content { flex:1; max-width:650px; margin:0 auto; text-align:center; }
+        .hero-logo { margin-bottom:20px; }
+        .hero-logo img { height:90px; width:auto; border-radius:12px; box-shadow:0 8px 24px rgba(102,126,234,0.3); }
+        .hero h1 { font-size:3rem; margin-bottom:10px; }
+        .highlight { background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .hero-slogan { font-size:1.25rem; color:#764ba2; font-weight:700; margin-bottom:8px; font-style:italic; }
+        .hero p { font-size:1.05rem; color:#666; margin-bottom:30px; }
+        .btn { display:inline-block; padding:13px 32px; border-radius:50px; text-decoration:none; font-weight:600; transition:all 0.3s; margin:8px; }
+        .btn-primary { background:var(--gradient); color:white; box-shadow:0 5px 15px rgba(102,126,234,0.4); }
+        .btn-primary:hover { transform:translateY(-3px); box-shadow:0 8px 25px rgba(102,126,234,0.5); }
+        .btn-secondary { background:white; color:var(--primary); border:2px solid var(--primary); }
+        .btn-secondary:hover { background:var(--gradient); color:white; border-color:transparent; transform:translateY(-3px); }
+        .container { max-width:1200px; margin:0 auto; padding:0 20px; }
+        section { padding:80px 0; }
+        .section-title { text-align:center; font-size:2.2rem; margin-bottom:50px; color:#333; }
+        .features { background:white; }
+        .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:28px; }
+        .feature-card { text-align:center; padding:38px 28px; border-radius:20px; background:white; box-shadow:0 4px 20px rgba(0,0,0,0.08); transition:all 0.3s; }
+        .feature-card:hover { transform:translateY(-8px); box-shadow:0 12px 35px rgba(0,0,0,0.12); }
+        .feature-icon { width:80px; height:80px; margin:0 auto 18px; background:linear-gradient(135deg,rgba(102,126,234,0.1),rgba(118,75,162,0.1)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; color:var(--primary); }
+        .services-section { background:#f4f6fb; }
+        .services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:28px; }
+        .service-card { background:white; border-radius:20px; padding:30px; box-shadow:0 4px 15px rgba(0,0,0,0.07); transition:all 0.3s; cursor:pointer; }
+        .service-card:hover { transform:translateY(-8px); box-shadow:0 14px 35px rgba(102,126,234,0.15); }
+        .service-icon { width:68px; height:68px; background:linear-gradient(135deg,rgba(102,126,234,0.1),rgba(118,75,162,0.1)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:var(--primary); margin-bottom:18px; }
+        .price { font-size:1.2rem; font-weight:700; color:#e74c3c; margin:12px 0; }
+        .rating { color:#ffc107; margin:8px 0; }
+        .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:28px; }
+        .step { text-align:center; padding:30px; background:white; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,0.07); }
+        .step-number { width:40px; height:40px; background:var(--gradient); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; margin:0 auto 18px; }
+        .step i { font-size:2.5rem; color:var(--primary); margin-bottom:14px; display:block; }
+        .footer { background:#2c3e50; color:white; padding:60px 0 20px; }
+        .footer-content { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:40px; margin-bottom:40px; }
+        .footer-logo { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+        .footer-logo img { height:42px; width:auto; border-radius:8px; }
+        .footer-logo-text .name { font-size:1.3rem; font-weight:700; color:white; }
+        .footer-logo-text .slogan { font-size:0.75rem; color:rgba(255,255,255,0.7); font-style:italic; }
+        .footer-section h4 { margin-bottom:18px; font-size:1rem; }
+        .footer-section ul { list-style:none; }
+        .footer-section ul li { margin-bottom:10px; }
+        .footer-section ul li a { color:rgba(255,255,255,0.8); text-decoration:none; transition:color 0.2s; }
+        .footer-section ul li a:hover { color:white; }
+        .social-links { display:flex; gap:12px; margin-top:18px; }
+        .social-links a { width:38px; height:38px; background:rgba(255,255,255,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; text-decoration:none; transition:all 0.2s; }
+        .social-links a:hover { background:var(--gradient); transform:translateY(-3px); }
+        .footer-bottom { text-align:center; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1); opacity:0.7; font-size:0.9rem; }
+        @media(max-width:768px){ .hero h1 { font-size:2.2rem; } .nav-links { display:none; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo-area">
+                <img src="logo.jpeg" alt="SewaSathi Logo">
+                <div class="logo-text">
+                    <span class="logo-name">SewaSathi</span>
+                    <span class="logo-slogan">मात्र एक कलमा, सेवा घर घरमा</span>
+                </div>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="services.html">Services</a>
+                <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
+                <a href="login.html">Login</a>
+                <a href="register.html" class="btn-nav">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-logo">
+                <img src="logo.jpeg" alt="SewaSathi">
+            </div>
+            <h1>Welcome to <span class="highlight">SewaSathi</span></h1>
+            <p class="hero-slogan">मात्र एक कलमा, सेवा घर घरमा</p>
+            <p>Nepal's Most Trusted Platform for Home Services</p>
+            <p style="font-size:0.95rem;color:#888;">Book verified professionals for plumbing, electrical, painting & more</p>
+            <div>
+                <a href="services.html" class="btn btn-primary"><i class="fas fa-search"></i> Find a Service</a>
+                <a href="register.html" class="btn btn-secondary"><i class="fas fa-user-plus"></i> Join as Professional</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose <span class="highlight">SewaSathi?</span></h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Verified Professionals</h3>
+                    <p>All service providers are background checked for your safety</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                    <h3>24/7 Availability</h3>
+                    <p>Book services anytime with our easy-to-use platform</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-rupee-sign"></i></div>
+                    <h3>Best Prices</h3>
+                    <p>Transparent pricing with no hidden charges</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-star"></i></div>
+                    <h3>Satisfaction Guarantee</h3>
+                    <p>Money-back guarantee if you're not satisfied</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-section">
+        <div class="container">
+            <h2 class="section-title">Our <span class="highlight">Services</span></h2>
+            <div class="services-grid">
+                <div class="service-card" onclick="window.location.href='services.html?category=plumbing'">
+                    <div class="service-icon"><i class="fas fa-wrench"></i></div>
+                    <h3>Plumbers</h3>
+                    <p>Expert plumbers for leak repairs, pipe installation, and bathroom fitting.</p>
+                    <div class="price">Starting Rs 499</div>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (2.5k+)</div>
+                </div>
+                <div class="service-card" onclick="window.location.href='services.html?category=electrical'">
+                    <div class="service-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Electricians</h3>
+                    <p>Licensed electricians for safe wiring, fixture installation, and repairs.</p>
+                    <div class="price">Starting Rs 399</div>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (1.8k+)</div>
+                </div>
+                <div class="service-card" onclick="window.location.href='services.html?category=painting'">
+                    <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3>Painters</h3>
+                    <p>Professional painters for walls, ceilings, and exterior surfaces.</p>
+                    <div class="price">Starting Rs 999</div>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (3.2k+)</div>
+                </div>
+                <div class="service-card" onclick="window.location.href='services.html?category=cleaning'">
+                    <div class="service-icon"><i class="fas fa-broom"></i></div>
+                    <h3>Housemaids</h3>
+                    <p>Deep cleaning for homes including kitchen, bathroom, and carpet.</p>
+                    <div class="price">Starting Rs 299</div>
+                    <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (3.5k+)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Introduction Section -->
+    <section class="about-section" style="background:white;padding:80px 0;">
+        <div class="container">
+            <h2 class="section-title">SewaSathi <span class="highlight">बारे</span></h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;max-width:1000px;margin:0 auto;">
+                <div>
+                    <h3 style="font-size:1.6rem;color:#333;margin-bottom:16px;line-height:1.4;">नेपालको पहिलो <span class="highlight">घरेलु सेवा</span> प्लेटफर्म</h3>
+                    <p style="color:#666;margin-bottom:14px;line-height:1.8;">SewaSathi नेपालमा घरेलु सेवाहरू प्रदान गर्ने एक भरपर्दो डिजिटल प्लेटफर्म हो। यहाँ तपाईंले प्लम्बर, इलेक्ट्रिसियन, चित्रकार, सफाई कर्मचारी, स्वास्थ्यकर्मी लगायत धेरै पेशाका विशेषज्ञहरू सजिलैसँग भेट्टाउन सक्नुहुन्छ।</p>
+                    <p style="color:#666;margin-bottom:14px;line-height:1.8;">हाम्रो लक्ष्य भनेको <strong>मात्र एक कलमा, सेवा घर घरमा</strong> — अर्थात् एउटा सजिलो क्लिकमै तपाईंको घरमा विश्वसनीय सेवा पुर्‍याउनु हो।</p>
+                    <p style="color:#666;line-height:1.8;">सेवा खोज्नेहरूले सीधै बुकिङ गर्न सक्नुहुन्छ, र सेवा दिनेहरूले आफ्नो प्रोफाइल बनाएर काम पाउन सक्नुहुन्छ। यो प्लेटफर्मले नेपालका दक्ष कामदारहरूलाई डिजिटल रूपमा जोड्ने काम गर्दछ।</p>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+                    <div style="background:linear-gradient(135deg,rgba(102,126,234,0.08),rgba(118,75,162,0.08));border-radius:16px;padding:24px;text-align:center;">
+                        <div style="font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">१०+</div>
+                        <div style="color:#666;font-size:0.9rem;margin-top:6px;">सेवाका प्रकार</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,rgba(102,126,234,0.08),rgba(118,75,162,0.08));border-radius:16px;padding:24px;text-align:center;">
+                        <div style="font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">२४/७</div>
+                        <div style="color:#666;font-size:0.9rem;margin-top:6px;">उपलब्धता</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,rgba(102,126,234,0.08),rgba(118,75,162,0.08));border-radius:16px;padding:24px;text-align:center;">
+                        <div style="font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">१००%</div>
+                        <div style="color:#666;font-size:0.9rem;margin-top:6px;">भरपर्दो</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,rgba(102,126,234,0.08),rgba(118,75,162,0.08));border-radius:16px;padding:24px;text-align:center;">
+                        <div style="font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">नेपाल</div>
+                        <div style="color:#666;font-size:0.9rem;margin-top:6px;">भरि सेवा</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It <span class="highlight">Works</span></h2>
+            <div class="steps">
+                <div class="step"><div class="step-number">1</div><i class="fas fa-search"></i><h3>Search Service</h3><p>Browse through our wide range of services</p></div>
+                <div class="step"><div class="step-number">2</div><i class="fas fa-calendar-check"></i><h3>Book</h3><p>Select your preferred time and date</p></div>
+                <div class="step"><div class="step-number">3</div><i class="fas fa-user-check"></i><h3>Get Service</h3><p>Professional arrives at your doorstep</p></div>
+                <div class="step"><div class="step-number">4</div><i class="fas fa-star"></i><h3>Rate & Review</h3><p>Share your experience with others</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team / Credits Section -->
+    <section style="background:#f4f6fb;padding:70px 0;">
+        <div class="container">
+            <h2 class="section-title">हाम्रो <span class="highlight">टिम</span></h2>
+            <p style="text-align:center;color:#888;margin-top:-30px;margin-bottom:50px;font-size:1rem;">SewaSathi बनाउने विद्यार्थी टिम</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;max-width:1000px;margin:0 auto;">
+                <div style="background:white;border-radius:20px;padding:34px 24px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div style="width:72px;height:72px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:white;font-size:1.8rem;font-weight:700;">P</div>
+                    <h3 style="font-size:1.1rem;color:#333;margin-bottom:6px;">Prashanna Rijal</h3>
+                    <p style="color:#888;font-size:0.85rem;"><i class="fas fa-code" style="color:#667eea;"></i>leader</p>
+                </div>
+                <div style="background:white;border-radius:20px;padding:34px 24px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div style="width:72px;height:72px;background:linear-gradient(135deg,#f093fb,#f5576c);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:white;font-size:1.8rem;font-weight:700;">S</div>
+                    <h3 style="font-size:1.1rem;color:#333;margin-bottom:6px;">Saksham Bhandari</h3>
+                    <p style="color:#888;font-size:0.85rem;"><i class="fas fa-palette" style="color:#f5576c;"></i> Designer</p>
+                </div>
+                <div style="background:white;border-radius:20px;padding:34px 24px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div style="width:72px;height:72px;background:linear-gradient(135deg,#4facfe,#00f2fe);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:white;font-size:1.8rem;font-weight:700;">P</div>
+                    <h3 style="font-size:1.1rem;color:#333;margin-bottom:6px;">Prasan Khatiwoda</h3>
+                    <p style="color:#888;font-size:0.85rem;"><i class="fas fa-server" style="color:#4facfe;"></i> Backend Dev</p>
+                </div>
+                <div style="background:white;border-radius:20px;padding:34px 24px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div style="width:72px;height:72px;background:linear-gradient(135deg,#43e97b,#38f9d7);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:white;font-size:1.8rem;font-weight:700;">A</div>
+                    <h3 style="font-size:1.1rem;color:#333;margin-bottom:6px;">Prashanna Rijal</h3>
+                    <p style="color:#888;font-size:0.85rem;"><i class="fas fa-tasks" style="color:#43e97b;"></i>Developer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="logo.jpeg" alt="SewaSathi">
+                        <div class="footer-logo-text">
+                            <div class="name">SewaSathi</div>
+                            <div class="slogan">मात्र एक कलमा, सेवा घर घरमा</div>
+                        </div>
+                    </div>
+                    <p style="opacity:0.8;font-size:0.9rem;">Nepal's most trusted platform for home services. Connecting you with verified professionals since 2024.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="messages.html">Messages</a></li>
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="register.html">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="services.html?category=plumbing">Plumbing</a></li>
+                        <li><a href="services.html?category=electrical">Electrical</a></li>
+                        <li><a href="services.html?category=painting">Painting</a></li>
+                        <li><a href="services.html?category=cleaning">Cleaning</a></li>
+                        <li><a href="services.html?category=health">Health</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> +977 9800980018</li>
+                        <li><i class="fas fa-envelope"></i> info@sewasathi.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Inaruwa, Nepal</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SewaSathi. All rights reserved. | Made with <i class="fas fa-heart" style="color:#ff6b6b;"></i> in Nepal</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Nepali AI Chatbot -->
+    <style>
+        #chatBtn { position:fixed; bottom:28px; right:28px; width:60px; height:60px; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:50%; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(102,126,234,0.5); z-index:1000; display:flex; align-items:center; justify-content:center; transition:transform 0.2s; }
+        #chatBtn:hover { transform:scale(1.1); }
+        #chatBtn i { color:white; font-size:1.5rem; }
+        #chatWindow { position:fixed; bottom:100px; right:28px; width:360px; height:500px; background:white; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.2); z-index:1000; display:none; flex-direction:column; overflow:hidden; }
+        #chatWindow.open { display:flex; }
+        #chatHeader { background:linear-gradient(135deg,#667eea,#764ba2); padding:18px 20px; color:white; display:flex; align-items:center; justify-content:space-between; }
+        #chatHeader .info { display:flex; align-items:center; gap:12px; }
+        #chatHeader .avatar { width:40px; height:40px; background:rgba(255,255,255,0.25); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+        #chatHeader h4 { font-size:1rem; margin-bottom:2px; }
+        #chatHeader p { font-size:0.75rem; opacity:0.85; }
+        #chatClose { background:none; border:none; color:white; font-size:1.4rem; cursor:pointer; opacity:0.8; }
+        #chatClose:hover { opacity:1; }
+        #chatMessages { flex:1; padding:16px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; background:#f9f9fb; }
+        .chat-msg { max-width:80%; padding:11px 15px; border-radius:16px; font-size:0.9rem; line-height:1.6; animation:fadeIn 0.2s ease; }
+        .chat-msg.bot { background:white; color:#333; border-bottom-left-radius:4px; box-shadow:0 2px 8px rgba(0,0,0,0.07); align-self:flex-start; }
+        .chat-msg.user { background:linear-gradient(135deg,#667eea,#764ba2); color:white; border-bottom-right-radius:4px; align-self:flex-end; }
+        .chat-msg.typing { color:#aaa; font-style:italic; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        #chatInputRow { padding:14px 16px; border-top:1px solid #eee; display:flex; gap:10px; background:white; }
+        #chatInput { flex:1; padding:11px 14px; border:2px solid #e0e0e0; border-radius:25px; font-size:0.9rem; outline:none; font-family:inherit; }
+        #chatInput:focus { border-color:#667eea; }
+        #chatSend { width:42px; height:42px; background:linear-gradient(135deg,#667eea,#764ba2); border:none; border-radius:50%; color:white; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        #chatSend:hover { opacity:0.9; }
+        .chat-suggestions { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+        .chat-suggestion { background:#f0f0ff; color:#667eea; border:1px solid #d0d8ff; padding:5px 12px; border-radius:20px; font-size:0.8rem; cursor:pointer; transition:all 0.15s; }
+        .chat-suggestion:hover { background:#667eea; color:white; }
+        @media(max-width:400px){ #chatWindow { width:calc(100vw - 20px); right:10px; } }
+    </style>
+
+    <!-- Chat Toggle Button -->
+    <button id="chatBtn" onclick="toggleChat()" title="SewaSathi सहायक">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <!-- Chat Window -->
+    <div id="chatWindow">
+        <div id="chatHeader">
+            <div class="info">
+                <div class="avatar"><i class="fas fa-robot"></i></div>
+                <div>
+                    <h4>SewaSathi सहायक</h4>
+                    <p>नेपालीमा कुरा गर्नुहोस्</p>
+                </div>
+            </div>
+            <button id="chatClose" onclick="toggleChat()"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chatMessages"></div>
+        <div id="chatInputRow">
+            <input type="text" id="chatInput" placeholder="नेपालीमा सोध्नुहोस्..." onkeydown="if(event.key==='Enter')sendChat()">
+            <button id="chatSend" onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+    let chatOpen = false;
+    let chatHistory = [];
+    const CHAT_API = 'http://localhost:5000/api';
+
+    function toggleChat() {
+        chatOpen = !chatOpen;
+        const win = document.getElementById('chatWindow');
+        const btn = document.getElementById('chatBtn');
+        win.classList.toggle('open', chatOpen);
+        btn.innerHTML = chatOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-comments"></i>';
+        if (chatOpen && chatHistory.length === 0) {
+            appendBotMsg('नमस्ते! 🙏 म SewaSathi को सहायक हुँ। तपाईंलाई कुन सेवामा सहयोग चाहिन्छ?', [
+                'प्लम्बर चाहिन्छ', 'इलेक्ट्रिसियन चाहिन्छ', 'सेवाहरू हेर्नुहोस्', 'बुकिङ कसरी गर्ने?'
+            ]);
+        }
+    }
+
+    function appendBotMsg(text, suggestions) {
+        const msgs = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = 'chat-msg bot';
+        div.innerHTML = text.replace(/\n/g, '<br>');
+        msgs.appendChild(div);
+        if (suggestions && suggestions.length) {
+            const sug = document.createElement('div');
+            sug.className = 'chat-suggestions';
+            suggestions.forEach(s => {
+                const btn = document.createElement('span');
+                btn.className = 'chat-suggestion';
+                btn.textContent = s;
+                btn.onclick = () => { sendChatText(s); };
+                sug.appendChild(btn);
+            });
+            msgs.appendChild(sug);
+        }
+        msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function appendUserMsg(text) {
+        const msgs = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = 'chat-msg user';
+        div.textContent = text;
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function appendTyping() {
+        const msgs = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = 'chat-msg bot typing';
+        div.id = 'typingIndicator';
+        div.textContent = 'टाइप गर्दैछ...';
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeTyping() {
+        const el = document.getElementById('typingIndicator');
+        if (el) el.remove();
+    }
+
+    async function sendChat() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+        sendChatText(text);
+    }
+
+    async function sendChatText(text) {
+        appendUserMsg(text);
+        chatHistory.push({ role: 'user', content: text });
+        appendTyping();
+
+        const systemPrompt = `तपाईं SewaSathi को नेपाली भाषाको सहायक हुनुहुन्छ। SewaSathi नेपालको एउटा घरेलु सेवा प्लेटफर्म हो जहाँ प्लम्बर, इलेक्ट्रिसियन, चित्रकार, सफाई कर्मचारी, डाक्टर, नर्स, ड्राइभर जस्ता विशेषज्ञहरू पाइन्छन्।
+
+मुख्य जानकारी:
+- सेवाहरू: प्लम्बिङ, इलेक्ट्रिकल, पेन्टिङ, सफाई, स्वास्थ्य सेवा, कारपेन्ट्री र अन्य
+- बुकिङ: services.html मा गएर कामदार छान्नुहोस् र "Book" बटन थिच्नुहोस्
+- दर्ता: register.html मा गएर ग्राहक वा कामदारको रूपमा दर्ता गर्नुहोस्
+- सन्देश: messages.html मा बुकिङका सूचनाहरू हेर्न सकिन्छ
+- सम्पर्क: +977 1-1234567, info@sewasathi.com
+
+सधैं नेपालीमा जवाफ दिनुहोस्। छोटो र स्पष्ट उत्तर दिनुहोस्। इमोजी प्रयोग गर्न मिल्छ।`;
+
+        try {
+            const response = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: 'claude-sonnet-4-20250514',
+                    max_tokens: 1000,
+                    system: systemPrompt,
+                    messages: chatHistory
+                })
+            });
+            const data = await response.json();
+            removeTyping();
+            const reply = data.content?.[0]?.text || 'माफ गर्नुहोस्, केही समस्या भयो। फेरि प्रयास गर्नुहोस्।';
+            chatHistory.push({ role: 'assistant', content: reply });
+
+            // Suggest links based on keywords
+            let suggestions = [];
+            const lower = reply.toLowerCase() + text.toLowerCase();
+            if (lower.includes('सेवा') || lower.includes('service')) suggestions.push('सेवाहरू हेर्नुहोस्');
+            if (lower.includes('दर्ता') || lower.includes('register')) suggestions.push('दर्ता गर्नुहोस्');
+            if (lower.includes('बुकिङ') || lower.includes('booking')) suggestions.push('बुकिङ गर्नुहोस्');
+            if (lower.includes('सन्देश') || lower.includes('message')) suggestions.push('सन्देश हेर्नुहोस्');
+
+            appendBotMsg(reply, suggestions.length ? suggestions : null);
+
+            // Handle suggestion link clicks
+            document.querySelectorAll('.chat-suggestion').forEach(btn => {
+                btn.onclick = function() {
+                    const t = this.textContent;
+                    if (t.includes('सेवाहरू')) window.location.href='services.html';
+                    else if (t.includes('दर्ता')) window.location.href='register.html';
+                    else if (t.includes('बुकिङ')) window.location.href='services.html';
+                    else if (t.includes('सन्देश')) window.location.href='messages.html';
+                    else sendChatText(t);
+                };
+            });
+        } catch(e) {
+            removeTyping();
+            appendBotMsg('माफ गर्नुहोस्, सर्भरसँग जडान भएन। कृपया फेरि प्रयास गर्नुहोस्। 🙏');
+        }
+    }
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
