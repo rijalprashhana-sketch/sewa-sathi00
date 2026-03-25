@@ -1,7 +1,7 @@
 // ============================================================
 // SewaSathi - Main App JS
 // ============================================================
-const API = 'http://localhost:5000/api';
+const API = '/api';
 
 function getToken() { return localStorage.getItem('ss_token'); }
 function getUser()  { try { return JSON.parse(localStorage.getItem('ss_user')); } catch(e){ return null; } }
