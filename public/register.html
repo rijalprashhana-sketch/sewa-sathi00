@@ -8,29 +8,52 @@
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#667eea,#764ba2); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
-        .card { background:white; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); width:100%; max-width:520px; padding:40px; }
-        .logo { text-align:center; margin-bottom:30px; }
-        .logo i { font-size:2.5rem; color:#667eea; }
-        .logo h2 { font-size:1.8rem; color:#333; margin-top:10px; }
-        .logo p { color:#888; margin-top:5px; }
+        .card { background:white; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); width:100%; max-width:540px; padding:36px; }
+        .logo { text-align:center; margin-bottom:24px; }
+        .logo img { height:58px; border-radius:10px; box-shadow:0 4px 12px rgba(102,126,234,0.2); }
+        .logo h2 { font-size:1.7rem; color:#333; margin-top:8px; }
+        .logo p { color:#764ba2; font-style:italic; font-size:0.82rem; }
+        .step-indicator { display:flex; justify-content:center; gap:0; margin-bottom:28px; }
+        .step-dot { display:flex; flex-direction:column; align-items:center; }
+        .step-dot .circle { width:34px; height:34px; border-radius:50%; background:#e0e0e0; color:#aaa; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; transition:all 0.3s; }
+        .step-dot.active .circle { background:linear-gradient(135deg,#667eea,#764ba2); color:white; box-shadow:0 3px 10px rgba(102,126,234,0.4); }
+        .step-dot.done .circle { background:#43e97b; color:white; }
+        .step-line { width:60px; height:2px; background:#e0e0e0; margin-top:17px; }
+        .step-line.done { background:linear-gradient(135deg,#667eea,#764ba2); }
+        .step-dot .lbl { font-size:0.68rem; color:#aaa; margin-top:4px; text-align:center; }
+        .step-dot.active .lbl { color:#667eea; font-weight:600; }
+        .form-step { display:none; }
+        .form-step.active { display:block; }
+        .phone-row { display:flex; gap:8px; align-items:flex-end; }
+        .country-code { background:#f4f6fb; border:2px solid #e0e0e0; border-radius:10px; padding:13px 12px; font-size:0.95rem; font-weight:600; color:#333; white-space:nowrap; display:flex; align-items:center; gap:6px; }
         .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
         @media(max-width:500px){ .form-row { grid-template-columns:1fr; } }
         .form-group { margin-bottom:16px; position:relative; }
         .form-group i.icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#667eea; }
         .form-group input, .form-group select { width:100%; padding:13px 13px 13px 42px; border:2px solid #e0e0e0; border-radius:10px; font-size:0.95rem; transition:border-color 0.2s; background:white; }
         .form-group input:focus, .form-group select:focus { border-color:#667eea; outline:none; }
+        .form-group.no-icon input { padding-left:14px; }
         .worker-fields { display:none; background:#f8f0ff; border-radius:12px; padding:16px; margin-bottom:16px; }
         .worker-fields h4 { color:#764ba2; margin-bottom:12px; font-size:0.95rem; }
         .btn { width:100%; padding:14px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; border-radius:10px; font-size:1.05rem; font-weight:600; cursor:pointer; margin-top:8px; transition:opacity 0.2s; }
         .btn:hover { opacity:0.9; }
         .btn:disabled { opacity:0.6; cursor:not-allowed; }
-        .links { text-align:center; margin-top:20px; color:#666; }
+        .btn-outline { background:white; color:#667eea; border:2px solid #667eea; }
+        .otp-inputs { display:flex; gap:10px; justify-content:center; margin:20px 0; }
+        .otp-inputs input { width:48px; height:56px; text-align:center; font-size:1.4rem; font-weight:700; border:2px solid #e0e0e0; border-radius:10px; transition:border-color 0.2s; }
+        .otp-inputs input:focus { border-color:#667eea; outline:none; }
+        .otp-notice { text-align:center; background:linear-gradient(135deg,rgba(102,126,234,0.08),rgba(118,75,162,0.08)); border-radius:12px; padding:16px; margin-bottom:20px; }
+        .otp-notice .phone-display { font-size:1.2rem; font-weight:700; color:#333; margin:6px 0; }
+        .otp-notice small { color:#888; }
+        .simulated-otp { background:#fffbe6; border:1px dashed #ffc107; border-radius:8px; padding:10px 14px; text-align:center; font-size:0.85rem; color:#856404; margin-bottom:14px; }
+        .resend-row { text-align:center; margin-top:10px; }
+        .resend-row button { background:none; border:none; color:#667eea; cursor:pointer; font-size:0.9rem; font-weight:500; text-decoration:underline; }
+        .links { text-align:center; margin-top:16px; color:#666; }
         .links a { color:#667eea; text-decoration:none; font-weight:500; }
-        .links a:hover { text-decoration:underline; }
-        .alert { padding:12px 15px; border-radius:10px; margin-bottom:18px; display:none; font-size:0.95rem; }
+        .alert { padding:12px 15px; border-radius:10px; margin-bottom:14px; display:none; font-size:0.95rem; }
         .alert-error { background:#fff0f0; color:#cc0000; border:1px solid #ffcccc; }
         .alert-success { background:#f0fff0; color:#006600; border:1px solid #aaddaa; }
-        .back { display:inline-block; margin-bottom:20px; color:#667eea; text-decoration:none; font-size:0.9rem; }
+        .back { display:inline-block; margin-bottom:16px; color:#667eea; text-decoration:none; font-size:0.9rem; }
         label.role-label { display:block; margin-bottom:6px; font-weight:600; color:#555; font-size:0.9rem; }
     </style>
 </head>
@@ -38,40 +61,99 @@
 <div class="card">
     <a href="index.html" class="back"><i class="fas fa-arrow-left"></i> Back to Home</a>
     <div class="logo">
-        <img src="logo.jpeg" alt="SewaSathi" style="height:64px;border-radius:10px;margin-bottom:8px;box-shadow:0 4px 12px rgba(102,126,234,0.2);">
+        <img src="logo.jpeg" alt="SewaSathi">
         <h2>Create Account</h2>
-        <p style="font-style:italic;color:#764ba2;font-size:0.85rem;">मात्र एक कलमा, सेवा घर घरमा</p>
+        <p>मात्र एक कलमा, सेवा घर घरमा</p>
     </div>
+
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+        <div class="step-dot active" id="sd1">
+            <div class="circle">1</div>
+            <div class="lbl">Phone</div>
+        </div>
+        <div class="step-line" id="sl1"></div>
+        <div class="step-dot" id="sd2">
+            <div class="circle">2</div>
+            <div class="lbl">Verify OTP</div>
+        </div>
+        <div class="step-line" id="sl2"></div>
+        <div class="step-dot" id="sd3">
+            <div class="circle">3</div>
+            <div class="lbl">Details</div>
+        </div>
+    </div>
+
     <div id="alertMessage" class="alert"></div>
-    <form id="registerForm">
+
+    <!-- Step 1: Phone Entry -->
+    <div class="form-step active" id="step1">
+        <h3 style="color:#333;margin-bottom:6px;">Enter Your Phone Number</h3>
+        <p style="color:#888;font-size:0.88rem;margin-bottom:18px;">We'll send an OTP to verify your number</p>
+        <div class="phone-row">
+            <div class="country-code"><img src="https://flagcdn.com/w20/np.png" alt="NP" style="height:14px;"> +977</div>
+            <div class="form-group" style="flex:1;margin-bottom:0;">
+                <i class="fas fa-phone icon"></i>
+                <input type="tel" id="phoneInput" placeholder="98XXXXXXXX (10 digits)" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
+            </div>
+        </div>
+        <small style="color:#aaa;display:block;margin-top:6px;margin-bottom:18px;"><i class="fas fa-info-circle"></i> Enter 10-digit Nepal number (e.g. 9812345678)</small>
+        <button class="btn" onclick="sendOTP()">
+            <i class="fas fa-paper-plane"></i> Send OTP
+        </button>
+    </div>
+
+    <!-- Step 2: OTP Verification -->
+    <div class="form-step" id="step2">
+        <div class="otp-notice">
+            <div><i class="fas fa-mobile-alt" style="color:#667eea;font-size:1.5rem;"></i></div>
+            <div class="phone-display" id="phoneDisplay"></div>
+            <small>OTP sent to +977 <span id="phoneDisplaySub"></span></small>
+        </div>
+        <div id="simulatedOTPBox" class="simulated-otp" style="display:none;">
+            <i class="fas fa-flask"></i> <strong>Demo Mode OTP:</strong> <span id="demoOTPCode" style="font-size:1.1rem;font-weight:700;letter-spacing:2px;color:#333;"></span>
+            <br><small>(In production, this is sent via SMS)</small>
+        </div>
+        <div class="otp-inputs">
+            <input type="text" maxlength="1" class="otp-digit" inputmode="numeric">
+            <input type="text" maxlength="1" class="otp-digit" inputmode="numeric">
+            <input type="text" maxlength="1" class="otp-digit" inputmode="numeric">
+            <input type="text" maxlength="1" class="otp-digit" inputmode="numeric">
+            <input type="text" maxlength="1" class="otp-digit" inputmode="numeric">
+            <input type="text" maxlength="1" class="otp-digit" inputmode="numeric">
+        </div>
+        <button class="btn" onclick="verifyOTPStep()">
+            <i class="fas fa-check-circle"></i> Verify OTP
+        </button>
+        <div class="resend-row">
+            <button onclick="resendOTP()"><i class="fas fa-redo"></i> Resend OTP</button>
+        </div>
+    </div>
+
+    <!-- Step 3: Full Registration Form -->
+    <div class="form-step" id="step3">
         <div class="form-row">
             <div class="form-group">
                 <i class="fas fa-user icon"></i>
-                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="text" id="regName" placeholder="Full Name" required>
             </div>
-            <div class="form-group">
-                <i class="fas fa-phone icon"></i>
-                <input type="tel" name="phone" placeholder="Phone Number" required>
-            </div>
-        </div>
-        <div class="form-row">
             <div class="form-group">
                 <i class="fas fa-envelope icon"></i>
-                <input type="email" name="email" placeholder="Email Address" required>
+                <input type="email" id="regEmail" placeholder="Email Address" required>
             </div>
-            <div class="form-group">
-                <i class="fas fa-city icon"></i>
-                <input type="text" name="city" placeholder="Your City" required>
-            </div>
+        </div>
+        <div class="form-group">
+            <i class="fas fa-city icon"></i>
+            <input type="text" id="regCity" placeholder="Your City" required>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <i class="fas fa-lock icon"></i>
-                <input type="password" name="password" id="pw" placeholder="Password (min 6 chars)" required minlength="6">
+                <input type="password" id="regPw" placeholder="Password (min 6 chars)" required minlength="6">
             </div>
             <div class="form-group">
                 <i class="fas fa-lock icon"></i>
-                <input type="password" name="confirmPassword" id="cpw" placeholder="Confirm Password" required>
+                <input type="password" id="regCpw" placeholder="Confirm Password" required>
             </div>
         </div>
 
@@ -79,7 +161,7 @@
             <label class="role-label">I want to:</label>
             <div class="form-group" style="margin-bottom:0">
                 <i class="fas fa-user-tag icon"></i>
-                <select name="role" id="roleSelect" required>
+                <select id="roleSelect" required>
                     <option value="" disabled selected>Select your role</option>
                     <option value="customer">Customer — I need services</option>
                     <option value="worker">Worker — I provide services</option>
@@ -92,7 +174,7 @@
             <h4><i class="fas fa-hard-hat"></i> Worker Details</h4>
             <div class="form-group">
                 <i class="fas fa-briefcase icon"></i>
-                <select name="professionSelect" id="professionSelect">
+                <select id="professionSelect">
                     <option value="" disabled selected>Select your profession</option>
                     <optgroup label="🔧 Technical">
                         <option value="Plumber|plumbing">Plumber</option>
@@ -125,19 +207,16 @@
             <div class="form-row">
                 <div class="form-group">
                     <i class="fas fa-calendar icon"></i>
-                    <input type="number" name="experience" id="experience" placeholder="Years of Experience" min="0">
-                </div>
-                <div class="form-group">
-                    <i class="fas fa-rupee-sign icon"></i>
-                    <input type="number" name="hourlyRate" id="hourlyRate" placeholder="Hourly Rate (Rs.)" min="0">
+                    <input type="number" id="experience" placeholder="Years of Experience" min="0">
                 </div>
             </div>
         </div>
 
-        <button type="submit" class="btn" id="registerBtn">
+        <button class="btn" onclick="submitRegistration()">
             <i class="fas fa-user-plus"></i> Create Account
         </button>
-    </form>
+    </div>
+
     <div class="links">
         Already have an account? <a href="login.html">Login here</a>
     </div>
@@ -147,7 +226,20 @@
 <script>
     if (isLoggedIn()) window.location.href = 'dashboard.html';
 
-    // Show/hide worker fields
+    let verifiedPhone = '';
+    let currentOTP = '';
+
+    // Auto-tab OTP inputs
+    document.querySelectorAll('.otp-digit').forEach((input, i, arr) => {
+        input.addEventListener('input', () => {
+            input.value = input.value.replace(/\D/g,'');
+            if (input.value && i < arr.length - 1) arr[i+1].focus();
+        });
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !input.value && i > 0) arr[i-1].focus();
+        });
+    });
+
     document.getElementById('roleSelect').addEventListener('change', function() {
         const wf = document.getElementById('workerFields');
         const inputs = wf.querySelectorAll('input, select');
@@ -160,54 +252,96 @@
         }
     });
 
-    document.getElementById('registerForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('registerBtn');
+    function goToStep(n) {
+        document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + n).classList.add('active');
+        [1,2,3].forEach(i => {
+            const dot = document.getElementById('sd' + i);
+            dot.classList.remove('active','done');
+            if (i < n) dot.classList.add('done');
+            else if (i === n) dot.classList.add('active');
+        });
+        [1,2].forEach(i => {
+            const line = document.getElementById('sl' + i);
+            line.classList.toggle('done', i < n);
+        });
+    }
 
-        const pw  = document.getElementById('pw').value;
-        const cpw = document.getElementById('cpw').value;
+    function sendOTP() {
+        const phone = document.getElementById('phoneInput').value.trim();
+        if (!validateNepalPhone(phone)) {
+            showAlert('Please enter a valid 10-digit Nepal phone number.', 'error');
+            return;
+        }
+        verifiedPhone = phone;
+        currentOTP = generateOTP();
+        storeOTP(phone, currentOTP);
+
+        // In production, call server to send SMS. Here we show it for demo.
+        document.getElementById('phoneDisplay').textContent = '+977 ' + phone;
+        document.getElementById('phoneDisplaySub').textContent = phone;
+        document.getElementById('demoOTPCode').textContent = currentOTP;
+        document.getElementById('simulatedOTPBox').style.display = 'block';
+
+        goToStep(2);
+        showAlert('OTP sent to +977 ' + phone + ' (demo mode: shown on screen)', 'success');
+    }
+
+    function resendOTP() {
+        currentOTP = generateOTP();
+        storeOTP(verifiedPhone, currentOTP);
+        document.getElementById('demoOTPCode').textContent = currentOTP;
+        document.querySelectorAll('.otp-digit').forEach(i => i.value = '');
+        document.querySelectorAll('.otp-digit')[0].focus();
+        showAlert('OTP resent!', 'success');
+    }
+
+    function verifyOTPStep() {
+        const digits = [...document.querySelectorAll('.otp-digit')].map(i => i.value).join('');
+        if (digits.length < 6) { showAlert('Please enter all 6 digits.', 'error'); return; }
+        if (verifyOTP(verifiedPhone, digits)) {
+            goToStep(3);
+            showAlert('Phone verified successfully!', 'success');
+        } else {
+            showAlert('Invalid or expired OTP. Please try again.', 'error');
+        }
+    }
+
+    async function submitRegistration() {
+        const name = document.getElementById('regName').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const city = document.getElementById('regCity').value.trim();
+        const pw = document.getElementById('regPw').value;
+        const cpw = document.getElementById('regCpw').value;
+        const role = document.getElementById('roleSelect').value;
+
+        if (!name || !email || !city || !pw || !role) { showAlert('Please fill all fields.', 'error'); return; }
         if (pw !== cpw) { showAlert('Passwords do not match!', 'error'); return; }
 
-        const role = document.getElementById('roleSelect').value;
-        const body = {
-            name:     this.name.value.trim(),
-            phone:    this.phone.value.trim(),
-            email:    this.email.value.trim(),
-            city:     this.city.value.trim(),
-            password: pw,
-            role:     role
-        };
+        const body = { name, phone: verifiedPhone, email, city, password: pw, role };
 
         if (role === 'worker') {
-            const profVal = document.getElementById('professionSelect').value; // e.g. "Doctor|health"
+            const profVal = document.getElementById('professionSelect').value;
             if (!profVal) { showAlert('Please select your profession.', 'error'); return; }
             const [profession, category] = profVal.split('|');
             body.profession = profession;
-            body.category   = category;
+            body.category = category;
             body.experience = parseInt(document.getElementById('experience').value) || 0;
-            body.hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+            body.hourlyRate = 0; // Removed price rate per requirements
         }
-
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
 
         try {
             const { ok, data } = await apiCall('POST', '/auth/register', body);
-
             if (ok && data.success) {
                 showAlert('Account created! Redirecting to login...', 'success');
                 setTimeout(() => { window.location.href = 'login.html'; }, 1800);
             } else {
                 showAlert(data.message || 'Registration failed. Please try again.', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
             }
         } catch(err) {
             showAlert('Cannot reach server. Make sure the backend is running on port 5000.', 'error');
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
         }
-    });
+    }
 </script>
 </body>
 </html>

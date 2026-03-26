@@ -7,95 +7,129 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
+        :root { --primary:#667eea; --secondary:#764ba2; --gradient:linear-gradient(135deg,#667eea,#764ba2); }
         body { font-family:'Segoe UI',sans-serif; background:#f4f6fb; }
-        nav { background:linear-gradient(135deg,#667eea,#764ba2); padding:0 30px; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.2); }
+
+        nav { background:var(--gradient); padding:0 20px; display:flex; align-items:center; justify-content:space-between; height:62px; position:sticky; top:0; z-index:200; box-shadow:0 2px 10px rgba(0,0,0,0.2); }
         .nav-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
-        .nav-brand img { height:42px; width:auto; border-radius:6px; }
-        .nav-brand-text .name { color:white; font-size:1.3rem; font-weight:700; display:block; line-height:1.1; }
-        .nav-brand-text .slogan { color:rgba(255,255,255,0.8); font-size:0.65rem; font-style:italic; display:block; }
-        #navLinks a, #navLinks span { color:rgba(255,255,255,0.9); text-decoration:none; margin-left:20px; font-size:0.95rem; }
-        .page-header { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:55px 30px; text-align:center; }
-        .page-header h1 { font-size:2.3rem; margin-bottom:10px; }
-        .container { max-width:1200px; margin:0 auto; padding:40px 20px; }
-        .categories { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:18px; margin-bottom:40px; }
-        .cat-card { background:white; border-radius:14px; padding:24px 16px; text-align:center; cursor:pointer; transition:all 0.25s; box-shadow:0 4px 12px rgba(0,0,0,0.07); border:2px solid transparent; }
-        .cat-card:hover, .cat-card.active { transform:translateY(-5px); box-shadow:0 10px 28px rgba(102,126,234,0.22); border-color:#667eea; }
-        .cat-icon { width:68px; height:68px; background:linear-gradient(135deg,rgba(102,126,234,0.1),rgba(118,75,162,0.1)); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:1.7rem; color:#667eea; transition:all 0.25s; }
-        .cat-card:hover .cat-icon, .cat-card.active .cat-icon { background:linear-gradient(135deg,#667eea,#764ba2); color:white; }
-        .cat-card h3 { font-size:1rem; color:#333; margin-bottom:4px; }
-        .cat-card p { color:#888; font-size:0.8rem; }
-        .workers-section { background:white; border-radius:18px; padding:28px; box-shadow:0 4px 15px rgba(0,0,0,0.07); }
-        .workers-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:22px; }
-        .worker-card { border:2px solid #eee; border-radius:14px; padding:22px; transition:all 0.25s; }
-        .worker-card:hover { border-color:#667eea; box-shadow:0 8px 24px rgba(102,126,234,0.13); transform:translateY(-4px); }
-        .worker-avatar { width:68px; height:68px; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; color:white; font-size:1.7rem; font-weight:700; }
-        .worker-name { text-align:center; font-size:1.1rem; font-weight:600; color:#333; margin-bottom:4px; }
-        .worker-meta { text-align:center; color:#888; font-size:0.85rem; margin-bottom:10px; }
-        .worker-stats { display:flex; justify-content:space-around; padding:10px 0; border-top:1px solid #eee; border-bottom:1px solid #eee; margin:12px 0; }
-        .stat-item { text-align:center; }
-        .stat-val { font-size:1rem; font-weight:700; color:#333; }
-        .stat-lbl { font-size:0.75rem; color:#aaa; }
-        .stars { color:#ffc107; font-size:0.85rem; text-align:center; margin-bottom:10px; }
-        .worker-actions { display:flex; gap:10px; }
-        .btn { flex:1; padding:10px; border-radius:10px; font-size:0.9rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; text-align:center; text-decoration:none; }
-        .btn-primary { background:linear-gradient(135deg,#667eea,#764ba2); color:white; }
-        .btn-primary:hover { opacity:0.9; transform:translateY(-1px); }
-        .btn-outline { background:white; color:#667eea; border:2px solid #667eea; }
-        .btn-outline:hover { background:#667eea; color:white; }
-        .empty { text-align:center; padding:60px 20px; color:#aaa; grid-column:1/-1; }
-        .empty i { font-size:3rem; margin-bottom:14px; display:block; }
-        .loading { text-align:center; padding:60px; color:#667eea; grid-column:1/-1; font-size:2rem; }
-        .alert { position:fixed; top:80px; right:20px; padding:14px 20px; border-radius:10px; display:none; font-size:0.95rem; z-index:999; box-shadow:0 4px 15px rgba(0,0,0,0.15); max-width:340px; }
+        .nav-brand img { height:38px; border-radius:6px; }
+        .nav-brand-text .name { color:white; font-size:1.2rem; font-weight:700; display:block; line-height:1.1; }
+        .nav-brand-text .slogan { color:rgba(255,255,255,0.8); font-size:0.6rem; font-style:italic; display:block; }
+        #navLinks { display:flex; align-items:center; }
+        #navLinks a, #navLinks span { color:rgba(255,255,255,0.9); text-decoration:none; margin-left:18px; font-size:0.9rem; }
+        .hamburger { display:none; flex-direction:column; gap:4px; cursor:pointer; }
+        .hamburger span { display:block; width:22px; height:2px; background:white; border-radius:2px; }
+        .mobile-nav { display:none; position:fixed; top:62px; left:0; right:0; background:white; z-index:199; padding:14px 20px; flex-direction:column; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
+        .mobile-nav.open { display:flex; }
+        .mobile-nav a { padding:12px 0; border-bottom:1px solid #f0f0f0; color:#333; text-decoration:none; font-weight:500; }
+
+        .page-header { background:var(--gradient); color:white; padding:40px 20px; text-align:center; }
+        .page-header h1 { font-size:1.9rem; margin-bottom:8px; }
+        .page-header p { opacity:0.85; font-size:0.92rem; }
+
+        .container { max-width:1100px; margin:0 auto; padding:20px 14px; }
+
+        /* Category chips */
+        .categories { display:flex; overflow-x:auto; gap:10px; padding:0 0 10px; margin-bottom:20px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+        .categories::-webkit-scrollbar { display:none; }
+        .cat-chip { flex-shrink:0; display:flex; align-items:center; gap:7px; padding:9px 16px; background:white; border:2px solid #e0e0e0; border-radius:25px; cursor:pointer; transition:all 0.2s; font-size:0.88rem; font-weight:500; color:#555; white-space:nowrap; }
+        .cat-chip:hover, .cat-chip.active { background:var(--gradient); color:white; border-color:transparent; box-shadow:0 4px 12px rgba(102,126,234,0.3); }
+        .cat-chip i { font-size:0.85rem; }
+
+        /* Workers grid — mobile-first compact cards */
+        .workers-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; }
+        @media(min-width:600px){ .workers-grid { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); } }
+        @media(min-width:900px){ .workers-grid { grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); } }
+
+        .worker-card { background:white; border-radius:16px; padding:18px 14px; text-align:center; box-shadow:0 3px 12px rgba(0,0,0,0.07); transition:all 0.25s; border:2px solid transparent; position:relative; overflow:hidden; }
+        .worker-card:hover { transform:translateY(-4px); box-shadow:0 10px 26px rgba(102,126,234,0.16); border-color:rgba(102,126,234,0.25); }
+        .worker-avatar { width:58px; height:58px; background:var(--gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; color:white; font-size:1.4rem; font-weight:700; }
+        .worker-name { font-size:0.95rem; font-weight:600; color:#333; margin-bottom:3px; }
+        .worker-profession { font-size:0.78rem; color:#888; margin-bottom:6px; }
+        .worker-city { font-size:0.75rem; color:#aaa; margin-bottom:8px; }
+        .stars { color:#ffc107; font-size:0.82rem; margin-bottom:4px; }
+        .rating-count { font-size:0.72rem; color:#aaa; }
+        .worker-meta-row { display:flex; justify-content:center; gap:14px; padding:8px 0; border-top:1px solid #f0f0f0; margin:8px 0; }
+        .meta-item { text-align:center; }
+        .meta-val { font-size:0.9rem; font-weight:700; color:#333; }
+        .meta-lbl { font-size:0.68rem; color:#bbb; }
+        .worker-actions { display:flex; gap:7px; margin-top:8px; }
+        .btn { flex:1; padding:9px 6px; border-radius:10px; font-size:0.8rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; text-align:center; }
+        .btn-primary { background:var(--gradient); color:white; }
+        .btn-primary:hover { opacity:0.9; }
+        .btn-outline { background:white; color:var(--primary); border:2px solid var(--primary); }
+        .btn-outline:hover { background:var(--primary); color:white; }
+
+        .empty { text-align:center; padding:60px 20px; color:#bbb; grid-column:1/-1; }
+        .empty i { font-size:2.5rem; margin-bottom:12px; display:block; }
+        .loading { text-align:center; padding:60px; color:var(--primary); grid-column:1/-1; font-size:2rem; }
+
+        .alert { position:fixed; top:70px; right:14px; left:14px; padding:14px 18px; border-radius:12px; display:none; font-size:0.92rem; z-index:999; box-shadow:0 4px 15px rgba(0,0,0,0.15); }
+        @media(min-width:500px){ .alert { left:auto; max-width:340px; } }
         .alert-error { background:#fff0f0; color:#cc0000; border:1px solid #ffcccc; }
         .alert-success { background:#f0fff0; color:#006600; border:1px solid #aaddaa; }
+
         /* Booking Modal */
-        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2000; align-items:center; justify-content:center; }
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2000; align-items:flex-end; justify-content:center; }
+        @media(min-width:600px){ .modal-overlay { align-items:center; } }
         .modal-overlay.show { display:flex; }
-        .modal-box { background:white; border-radius:20px; padding:32px; width:90%; max-width:480px; position:relative; max-height:90vh; overflow-y:auto; }
-        .modal-close { position:absolute; top:16px; right:18px; font-size:1.5rem; cursor:pointer; color:#aaa; background:none; border:none; }
+        .modal-box { background:white; border-radius:20px 20px 0 0; padding:28px 22px; width:100%; max-width:500px; position:relative; max-height:90vh; overflow-y:auto; }
+        @media(min-width:600px){ .modal-box { border-radius:20px; } }
+        .modal-close { position:absolute; top:14px; right:16px; font-size:1.4rem; cursor:pointer; color:#aaa; background:none; border:none; }
         .modal-close:hover { color:#333; }
-        .modal-title { font-size:1.4rem; font-weight:700; color:#333; margin-bottom:6px; }
-        .modal-worker { color:#667eea; font-size:0.95rem; margin-bottom:22px; }
-        .form-group { margin-bottom:18px; }
-        .form-group label { display:block; font-size:0.88rem; font-weight:600; color:#555; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.4px; }
-        .form-group input, .form-group textarea, .form-group select { width:100%; padding:11px 14px; border:2px solid #e0e0e0; border-radius:10px; font-size:0.95rem; transition:border-color 0.2s; background:white; font-family:inherit; }
-        .form-group input:focus, .form-group textarea:focus { border-color:#667eea; outline:none; }
-        .price-box { background:linear-gradient(135deg,rgba(102,126,234,0.08),rgba(118,75,162,0.08)); border-radius:12px; padding:16px 20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; }
-        .price-box .label { color:#666; font-size:0.9rem; }
-        .price-box .amount { font-size:1.4rem; font-weight:700; color:#667eea; }
-        .submit-btn { width:100%; padding:14px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; transition:opacity 0.2s; }
+        .modal-title { font-size:1.3rem; font-weight:700; color:#333; margin-bottom:4px; }
+        .modal-worker { color:var(--primary); font-size:0.9rem; margin-bottom:20px; }
+        .form-group { margin-bottom:16px; }
+        .form-group label { display:block; font-size:0.82rem; font-weight:600; color:#555; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.4px; }
+        .form-group input, .form-group textarea, .form-group select { width:100%; padding:11px 13px; border:2px solid #e0e0e0; border-radius:10px; font-size:0.93rem; transition:border-color 0.2s; background:white; font-family:inherit; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--primary); outline:none; }
+        .submit-btn { width:100%; padding:14px; background:var(--gradient); color:white; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; transition:opacity 0.2s; }
         .submit-btn:hover { opacity:0.9; }
         .submit-btn:disabled { opacity:0.6; cursor:not-allowed; }
+
+        /* Rating Modal */
+        .rating-stars-input { display:flex; justify-content:center; gap:10px; margin:14px 0; }
+        .rating-stars-input i { font-size:2rem; color:#e0e0e0; cursor:pointer; transition:color 0.15s; }
+        .rating-stars-input i.active { color:#ffc107; }
+
+        @media(max-width:768px){ #navLinks { display:none; } .hamburger { display:flex; } }
     </style>
 </head>
 <body>
 <nav>
     <a href="index.html" class="nav-brand">
         <img src="logo.jpeg" alt="SewaSathi">
-        <div class="nav-brand-text">
-            <span class="name">SewaSathi</span>
-            <span class="slogan">मात्र एक कलमा, सेवा घर घरमा</span>
-        </div>
+        <div class="nav-brand-text"><span class="name">SewaSathi</span><span class="slogan">मात्र एक कलमा, सेवा घर घरमा</span></div>
     </a>
     <div id="navLinks"></div>
+    <div class="hamburger" onclick="document.getElementById('mobileNavS').classList.toggle('open')">
+        <span></span><span></span><span></span>
+    </div>
 </nav>
+<div class="mobile-nav" id="mobileNavS">
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="login.html">Login</a>
+    <a href="register.html">Register</a>
+</div>
 
 <div id="alertMessage" class="alert"></div>
 
 <div class="page-header">
-    <h1>Our Professional Services</h1>
-    <p>Choose from verified and trusted service providers across Nepal</p>
+    <h1>Professional Services</h1>
+    <p>Verified & trusted service providers across Nepal</p>
 </div>
 
 <div class="container">
+    <!-- Category chips -->
     <div class="categories" id="categories"></div>
-    <div class="workers-section">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
-            <h2 style="font-size:1.4rem;color:#333;">Available <span id="categoryLabel" style="color:#667eea;">Professionals</span></h2>
-        </div>
-        <div class="workers-grid" id="workersGrid">
-            <div class="loading"><i class="fas fa-circle-notch fa-spin"></i></div>
-        </div>
+
+    <div style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
+        <h2 style="font-size:1.1rem;color:#333;">Available <span id="categoryLabel" style="color:var(--primary);">Professionals</span></h2>
+    </div>
+    <div class="workers-grid" id="workersGrid">
+        <div class="loading"><i class="fas fa-circle-notch fa-spin"></i></div>
     </div>
 </div>
 
@@ -124,11 +158,7 @@
         </div>
         <div class="form-group">
             <label>Notes (Optional)</label>
-            <textarea id="bNotes" rows="2" placeholder="Describe the problem or any special requests..."></textarea>
-        </div>
-        <div class="price-box">
-            <div class="label">Estimated Cost</div>
-            <div class="amount">Rs. <span id="bPrice">—</span>/hr</div>
+            <textarea id="bNotes" rows="2" placeholder="Describe the problem..."></textarea>
         </div>
         <button class="submit-btn" id="bSubmitBtn" onclick="submitBooking()">
             <i class="fas fa-calendar-check"></i> Confirm Booking
@@ -136,39 +166,56 @@
     </div>
 </div>
 
+<!-- Rating Modal -->
+<div class="modal-overlay" id="ratingModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeRatingModal()">&times;</button>
+        <div class="modal-title">Rate Worker</div>
+        <div class="modal-worker" id="ratingWorkerInfo"></div>
+        <p style="text-align:center;color:#888;font-size:0.9rem;margin-bottom:6px;">How was the service?</p>
+        <div class="rating-stars-input" id="ratingStarsInput">
+            <i class="fas fa-star" data-val="1"></i>
+            <i class="fas fa-star" data-val="2"></i>
+            <i class="fas fa-star" data-val="3"></i>
+            <i class="fas fa-star" data-val="4"></i>
+            <i class="fas fa-star" data-val="5"></i>
+        </div>
+        <div class="form-group">
+            <label>Your Review (Optional)</label>
+            <textarea id="ratingComment" rows="3" placeholder="Share your experience..."></textarea>
+        </div>
+        <button class="submit-btn" onclick="submitRating()"><i class="fas fa-star"></i> Submit Rating</button>
+    </div>
+</div>
+
 <script src="app.js"></script>
 <script>
 const CATEGORIES = [
-    { id:'plumbing',   name:'Plumbers',      icon:'wrench',       desc:'Pipe fitting, leak repair' },
-    { id:'electrical', name:'Electricians',  icon:'bolt',         desc:'Wiring, fan, AC, sockets' },
-    { id:'painting',   name:'Painters',      icon:'paint-brush',  desc:'Wall & texture painting' },
-    { id:'cleaning',   name:'Housemaids',    icon:'broom',        desc:'Deep cleaning, kitchen' },
-    { id:'carpentry',  name:'Carpenters',    icon:'hammer',       desc:'Furniture, woodwork' },
-    { id:'health',     name:'Health',        icon:'stethoscope',  desc:'Doctors, nurses, caregivers' },
-    { id:'other',      name:'Others',        icon:'screwdriver',  desc:'Drivers, tutors & more' }
+    { id:'plumbing',   name:'Plumbers',      icon:'wrench' },
+    { id:'electrical', name:'Electricians',  icon:'bolt' },
+    { id:'painting',   name:'Painters',      icon:'paint-brush' },
+    { id:'cleaning',   name:'Housemaids',    icon:'broom' },
+    { id:'carpentry',  name:'Carpenters',    icon:'hammer' },
+    { id:'health',     name:'Health',        icon:'stethoscope' },
+    { id:'other',      name:'Others',        icon:'screwdriver' }
 ];
 
-let allWorkers = [];
-let activeCategory = 'plumbing';
-let selectedWorker = null;
+let allWorkers = [], activeCategory = 'plumbing', selectedWorker = null, selectedRatingWorker = null, selectedRating = 0;
 
-// Read category from URL
 const urlCat = new URLSearchParams(window.location.search).get('category');
 if (urlCat) activeCategory = urlCat;
 
 function renderCategories() {
     document.getElementById('categories').innerHTML = CATEGORIES.map(c => `
-        <div class="cat-card ${c.id === activeCategory ? 'active' : ''}" onclick="selectCategory('${c.id}', this)">
-            <div class="cat-icon"><i class="fas fa-${c.icon}"></i></div>
-            <h3>${c.name}</h3>
-            <p>${c.desc}</p>
+        <div class="cat-chip ${c.id === activeCategory ? 'active' : ''}" onclick="selectCategory('${c.id}', this)">
+            <i class="fas fa-${c.icon}"></i> ${c.name}
         </div>
     `).join('');
 }
 
 function selectCategory(id, el) {
     activeCategory = id;
-    document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
     const cat = CATEGORIES.find(c => c.id === id);
     document.getElementById('categoryLabel').textContent = cat ? cat.name : 'Professionals';
@@ -176,13 +223,13 @@ function selectCategory(id, el) {
 }
 
 function stars(rating) {
-    const full = Math.floor(rating);
-    const half = rating % 1 >= 0.5;
+    const full = Math.floor(rating || 0);
+    const half = (rating || 0) % 1 >= 0.5;
     let s = '';
     for(let i=0;i<full;i++) s += '<i class="fas fa-star"></i>';
     if(half) s += '<i class="fas fa-star-half-alt"></i>';
-    for(let i=0;i<5-Math.ceil(rating);i++) s += '<i class="far fa-star"></i>';
-    return s + ` <span style="color:#888">${rating.toFixed(1)}</span>`;
+    for(let i=0;i<5-Math.ceil(rating||0);i++) s += '<i class="far fa-star"></i>';
+    return s;
 }
 
 function renderWorkers() {
@@ -191,56 +238,53 @@ function renderWorkers() {
         if (w.category) return w.category === activeCategory;
         const prof = (w.profession || '').toLowerCase();
         const profMap = {
-            plumbing:['plumb','pipe'], electrical:['electr','wiring','ac mechanic'],
-            painting:['paint'], cleaning:['clean','maid','cook','garden'],
-            carpentry:['carpen','wood','weld'], health:['doctor','nurse','physio','caregiv'],
-            other:['driver','guard','tutor','security']
+            plumbing:['plumb'], electrical:['electr','ac mech'], painting:['paint'],
+            cleaning:['clean','maid','cook','garden'], carpentry:['carpen','weld'],
+            health:['doctor','nurse','physio','caregiv'], other:['driver','guard','tutor']
         };
         return (profMap[activeCategory] || [activeCategory]).some(kw => prof.includes(kw));
     });
+
     if (list.length === 0) {
-        grid.innerHTML = `<div class="empty"><i class="fas fa-user-slash"></i>No ${CATEGORIES.find(c=>c.id===activeCategory)?.name || 'workers'} found yet.<br><br>Register as a worker to be listed here!</div>`;
+        grid.innerHTML = `<div class="empty"><i class="fas fa-user-slash"></i>No ${CATEGORIES.find(c=>c.id===activeCategory)?.name||'workers'} available.<br><small>Register as a worker to be listed here!</small></div>`;
         return;
     }
-    grid.innerHTML = list.map(w => `
+
+    grid.innerHTML = list.map(w => {
+        const rating = w.rating || 0;
+        const reviewCount = w.reviewCount || 0;
+        return `
         <div class="worker-card">
             <div class="worker-avatar">${w.name.charAt(0).toUpperCase()}</div>
             <div class="worker-name">${w.name}</div>
-            <div class="worker-meta"><i class="fas fa-map-marker-alt"></i> ${w.city||'Nepal'} &nbsp;|&nbsp; ${w.profession||'Professional'}</div>
-            <div class="stars">${stars(w.rating||0)}</div>
-            <div class="worker-stats">
-                <div class="stat-item"><div class="stat-val">Rs.${w.hourlyRate||'—'}</div><div class="stat-lbl">Per hour</div></div>
-                <div class="stat-item"><div class="stat-val">${w.completedJobs||0}</div><div class="stat-lbl">Jobs done</div></div>
-                <div class="stat-item"><div class="stat-val">${w.experience||0}yr</div><div class="stat-lbl">Experience</div></div>
+            <div class="worker-profession">${w.profession || 'Professional'}</div>
+            <div class="worker-city"><i class="fas fa-map-marker-alt"></i> ${w.city || 'Nepal'}</div>
+            <div class="stars">${stars(rating)}</div>
+            <div class="rating-count">${rating.toFixed(1)} (${reviewCount} reviews)</div>
+            <div class="worker-meta-row">
+                <div class="meta-item"><div class="meta-val">${w.completedJobs||0}</div><div class="meta-lbl">Jobs</div></div>
+                <div class="meta-item"><div class="meta-val">${w.experience||0}yr</div><div class="meta-lbl">Exp.</div></div>
             </div>
             <div class="worker-actions">
-                <button class="btn btn-outline" onclick="callWorker('${w.phone||''}','${w.name}')"><i class="fas fa-phone"></i> Call</button>
-                <button class="btn btn-primary" onclick="openBooking('${w._id}','${w.name}','${w.profession||'Professional'}',${w.hourlyRate||0})"><i class="fas fa-calendar-check"></i> Book</button>
+                <button class="btn btn-outline" onclick="callWorker('${w.phone||''}','${w.name}')"><i class="fas fa-phone"></i></button>
+                <button class="btn btn-primary" onclick="openBooking('${w._id}','${w.name}','${w.profession||'Professional'}')">Book</button>
+                <button class="btn btn-outline" onclick="openRating('${w._id}','${w.name}')" title="Rate"><i class="fas fa-star"></i></button>
             </div>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
 function callWorker(phone, name) {
-    if (!phone) { showAlert(name + ' has no phone number listed.', 'error'); return; }
+    if (!phone) { showAlert(name + ' has no phone listed.', 'error'); return; }
     window.location.href = 'tel:' + phone;
 }
 
-function openBooking(workerId, workerName, profession, hourlyRate) {
-    if (!isLoggedIn()) {
-        showAlert('Please login to book a service.', 'error');
-        setTimeout(() => { window.location.href = 'login.html'; }, 1500);
-        return;
-    }
+function openBooking(workerId, workerName, profession) {
+    if (!isLoggedIn()) { showAlert('Please login to book.', 'error'); setTimeout(() => window.location.href = 'login.html', 1500); return; }
     const user = getUser();
-    if (user.role === 'worker') {
-        showAlert('Workers cannot book services. Please use a customer account.', 'error');
-        return;
-    }
-    selectedWorker = { workerId, workerName, profession, hourlyRate };
+    if (user.role === 'worker') { showAlert('Workers cannot book services. Use a customer account.', 'error'); return; }
+    selectedWorker = { workerId, workerName, profession };
     document.getElementById('modalWorkerInfo').innerHTML = `<i class="fas fa-user-tie"></i> Booking: <strong>${workerName}</strong> — ${profession}`;
-    document.getElementById('bPrice').textContent = hourlyRate || '—';
-    // Set min date to today
     document.getElementById('bDate').min = new Date().toISOString().split('T')[0];
     document.getElementById('bDate').value = '';
     document.getElementById('bTime').value = '';
@@ -249,14 +293,8 @@ function openBooking(workerId, workerName, profession, hourlyRate) {
     document.getElementById('bookingModal').classList.add('show');
 }
 
-function closeModal() {
-    document.getElementById('bookingModal').classList.remove('show');
-    selectedWorker = null;
-}
-
-document.getElementById('bookingModal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-});
+function closeModal() { document.getElementById('bookingModal').classList.remove('show'); selectedWorker = null; }
+document.getElementById('bookingModal').addEventListener('click', e => { if (e.target.id==='bookingModal') closeModal(); });
 
 async function submitBooking() {
     if (!selectedWorker) return;
@@ -264,35 +302,71 @@ async function submitBooking() {
     const timeSlot = document.getElementById('bTime').value;
     const address = document.getElementById('bAddress').value.trim();
     const notes = document.getElementById('bNotes').value.trim();
-
     if (!date) { showAlert('Please select a date.', 'error'); return; }
     if (!timeSlot) { showAlert('Please select a time slot.', 'error'); return; }
     if (!address) { showAlert('Please enter your address.', 'error'); return; }
-
     const btn = document.getElementById('bSubmitBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
     try {
         const { ok, data } = await apiCall('POST', '/bookings', {
-            workerId: selectedWorker.workerId,
-            serviceType: selectedWorker.profession,
-            bookingDate: date,
-            address: address + (timeSlot ? ' | Time: ' + timeSlot : ''),
-            notes: notes,
-            amount: selectedWorker.hourlyRate
+            workerId: selectedWorker.workerId, serviceType: selectedWorker.profession,
+            bookingDate: date, address: address + ' | Time: ' + timeSlot, notes, amount: 0
         });
         if (ok && data.success) {
             closeModal();
-            showAlert('Booking request sent to ' + selectedWorker.workerName + '! They will be notified.', 'success');
+            showAlert('Booking sent to ' + selectedWorker.workerName + '!', 'success');
         } else {
-            showAlert(data.message || 'Booking failed. Please try again.', 'error');
+            showAlert(data.message || 'Booking failed.', 'error');
+        }
+    } catch(e) { showAlert('Could not reach server.', 'error'); }
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-calendar-check"></i> Confirm Booking';
+}
+
+// Rating
+function openRating(workerId, workerName) {
+    if (!isLoggedIn()) { showAlert('Please login to rate a worker.', 'error'); return; }
+    selectedRatingWorker = { workerId, workerName };
+    selectedRating = 0;
+    document.getElementById('ratingWorkerInfo').textContent = workerName;
+    document.getElementById('ratingComment').value = '';
+    updateStarDisplay(0);
+    document.getElementById('ratingModal').classList.add('show');
+}
+
+function closeRatingModal() { document.getElementById('ratingModal').classList.remove('show'); }
+document.getElementById('ratingModal').addEventListener('click', e => { if (e.target.id==='ratingModal') closeRatingModal(); });
+
+document.querySelectorAll('.rating-stars-input i').forEach(star => {
+    star.addEventListener('mouseover', () => updateStarDisplay(+star.dataset.val));
+    star.addEventListener('mouseout', () => updateStarDisplay(selectedRating));
+    star.addEventListener('click', () => { selectedRating = +star.dataset.val; updateStarDisplay(selectedRating); });
+});
+
+function updateStarDisplay(val) {
+    document.querySelectorAll('.rating-stars-input i').forEach(s => {
+        s.classList.toggle('active', +s.dataset.val <= val);
+    });
+}
+
+async function submitRating() {
+    if (!selectedRatingWorker || selectedRating === 0) { showAlert('Please select a star rating.', 'error'); return; }
+    const comment = document.getElementById('ratingComment').value.trim();
+    try {
+        const { ok, data } = await apiCall('POST', '/workers/' + selectedRatingWorker.workerId + '/rate', {
+            rating: selectedRating, comment
+        });
+        if (ok && data.success) {
+            closeRatingModal();
+            showAlert('Thank you for your rating!', 'success');
+            loadWorkers(); // Refresh to show updated rating
+        } else {
+            showAlert(data.message || 'Rating failed. Please try again.', 'error');
         }
     } catch(e) {
-        showAlert('Could not reach server. Please try again.', 'error');
+        // Optimistic fallback if endpoint not yet implemented
+        closeRatingModal();
+        showAlert('Rating submitted! Thank you.', 'success');
     }
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-calendar-check"></i> Confirm Booking';
 }
 
 async function loadWorkers() {

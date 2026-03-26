@@ -7,112 +7,213 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Segoe UI',sans-serif; background:#f4f6fb; min-height:100vh; }
-        nav { background:linear-gradient(135deg,#667eea,#764ba2); padding:0 30px; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.2); }
+        :root { --primary:#667eea; --secondary:#764ba2; --gradient:linear-gradient(135deg,#667eea,#764ba2); }
+        body { font-family:'Segoe UI',sans-serif; background:#f4f6fb; min-height:100vh; padding-bottom:90px; }
+
+        nav { background:var(--gradient); padding:0 20px; display:flex; align-items:center; justify-content:space-between; height:62px; position:sticky; top:0; z-index:200; box-shadow:0 2px 10px rgba(0,0,0,0.2); }
         .nav-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
-        .nav-brand img { height:42px; width:auto; border-radius:6px; }
-        .nav-brand-text .name { color:white; font-size:1.3rem; font-weight:700; display:block; line-height:1.1; }
-        .nav-brand-text .slogan { color:rgba(255,255,255,0.8); font-size:0.65rem; font-style:italic; display:block; }
-        #navLinks a, #navLinks span { color:rgba(255,255,255,0.9); text-decoration:none; margin-left:20px; font-size:0.95rem; }
-        .hero { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:38px 30px; }
-        .container { max-width:1100px; margin:0 auto; padding:28px 20px; }
-        .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:18px; margin-bottom:28px; }
-        .stat-card { background:white; border-radius:16px; padding:22px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.07); cursor:pointer; transition:transform 0.2s; }
-        .stat-card:hover { transform:translateY(-3px); }
-        .stat-card .number { font-size:2.3rem; font-weight:700; color:#667eea; margin:8px 0 4px; }
-        .stat-card h3 { color:#555; font-size:0.9rem; font-weight:500; }
-        .stat-card .icon { font-size:1.5rem; color:#764ba2; opacity:0.5; }
-        .section { background:white; border-radius:16px; padding:26px; box-shadow:0 4px 15px rgba(0,0,0,0.07); margin-bottom:22px; }
-        .section h2 { font-size:1.2rem; color:#333; margin-bottom:18px; padding-bottom:12px; border-bottom:2px solid #f0f0f0; }
-        .profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-        @media(max-width:600px){ .profile-grid { grid-template-columns:1fr; } }
-        .profile-item { background:#f8f9fa; border-radius:10px; padding:13px; }
-        .profile-item .label { font-size:0.78rem; color:#888; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
-        .profile-item .value { font-size:0.97rem; color:#333; font-weight:500; }
-        .badge { display:inline-block; padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:600; }
+        .nav-brand img { height:38px; border-radius:6px; }
+        .nav-brand-text .name { color:white; font-size:1.2rem; font-weight:700; display:block; }
+        .nav-brand-text .slogan { color:rgba(255,255,255,0.8); font-size:0.6rem; font-style:italic; display:block; }
+        #navLinks { display:flex; align-items:center; }
+        #navLinks a, #navLinks span { color:rgba(255,255,255,0.9); text-decoration:none; margin-left:16px; font-size:0.88rem; }
+        .hamburger { display:none; flex-direction:column; gap:4px; cursor:pointer; }
+        .hamburger span { display:block; width:22px; height:2px; background:white; border-radius:2px; }
+        .mobile-nav { display:none; position:fixed; top:62px; left:0; right:0; background:white; z-index:199; padding:14px 20px; flex-direction:column; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
+        .mobile-nav.open { display:flex; }
+        .mobile-nav a { padding:12px 0; border-bottom:1px solid #f0f0f0; color:#333; text-decoration:none; font-weight:500; }
+
+        .hero { background:var(--gradient); color:white; padding:26px 20px; }
+        .hero h1 { font-size:1.4rem; font-weight:700; }
+        .hero p { opacity:0.85; font-size:0.87rem; margin-top:4px; }
+
+        .container { max-width:1000px; margin:0 auto; padding:18px 14px; }
+
+        .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+        @media(max-width:500px){ .stats { grid-template-columns:repeat(2,1fr); } }
+        .stat-card { background:white; border-radius:14px; padding:16px 12px; text-align:center; box-shadow:0 3px 12px rgba(0,0,0,0.07); cursor:pointer; transition:transform 0.2s; }
+        .stat-card:hover { transform:translateY(-2px); }
+        .stat-card .number { font-size:1.8rem; font-weight:700; color:var(--primary); margin:4px 0; }
+        .stat-card h3 { color:#666; font-size:0.75rem; font-weight:500; }
+        .stat-card .icon { font-size:1.2rem; color:var(--secondary); opacity:0.5; }
+
+        .section { background:white; border-radius:16px; padding:20px; box-shadow:0 3px 12px rgba(0,0,0,0.07); margin-bottom:18px; }
+        .section h2 { font-size:1.05rem; color:#333; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid #f0f0f0; }
+
+        .profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        @media(max-width:480px){ .profile-grid { grid-template-columns:1fr; } }
+        .profile-item { background:#f8f9fa; border-radius:10px; padding:11px; }
+        .profile-item .label { font-size:0.72rem; color:#888; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; }
+        .profile-item .value { font-size:0.9rem; color:#333; font-weight:500; }
+        .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; }
         .badge-customer { background:#e3f2fd; color:#1565c0; }
         .badge-worker { background:#f3e5f5; color:#6a1b9a; }
-        .booking-item { display:flex; justify-content:space-between; align-items:center; padding:14px; border:1px solid #eee; border-radius:10px; margin-bottom:10px; flex-wrap:wrap; gap:10px; }
-        .booking-info strong { display:block; font-size:0.97rem; color:#333; }
-        .booking-info small { color:#888; font-size:0.83rem; }
-        .status-badge { padding:5px 12px; border-radius:20px; font-size:0.8rem; font-weight:600; }
+
+        .booking-item { display:flex; justify-content:space-between; align-items:flex-start; padding:12px; border:1px solid #eee; border-radius:10px; margin-bottom:8px; gap:8px; flex-wrap:wrap; }
+        .booking-info strong { display:block; font-size:0.9rem; color:#333; }
+        .booking-info small { color:#888; font-size:0.78rem; display:block; margin-top:2px; }
+        .status-badge { padding:4px 10px; border-radius:16px; font-size:0.74rem; font-weight:600; white-space:nowrap; flex-shrink:0; }
         .status-pending { background:#fff3cd; color:#856404; }
         .status-confirmed { background:#d1ecf1; color:#0c5460; }
         .status-completed { background:#d4edda; color:#155724; }
         .status-cancelled { background:#f8d7da; color:#721c24; }
-        .no-bookings { text-align:center; padding:40px; color:#aaa; }
-        .no-bookings i { font-size:3rem; margin-bottom:14px; display:block; }
-        .btn { display:inline-block; padding:10px 22px; border-radius:10px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; text-decoration:none; font-weight:600; font-size:0.9rem; border:none; cursor:pointer; }
-        .btn:hover { opacity:0.9; }
-        .btn-msg { background:linear-gradient(135deg,#e74c3c,#c0392b); }
-        .quick-actions { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:22px; }
-        .quick-btn { display:flex; align-items:center; gap:8px; padding:13px 20px; background:white; border-radius:14px; box-shadow:0 4px 15px rgba(0,0,0,0.07); text-decoration:none; color:#333; font-weight:600; transition:all 0.2s; border:2px solid transparent; }
-        .quick-btn:hover { border-color:#667eea; color:#667eea; transform:translateY(-2px); }
-        .quick-btn i { color:#667eea; font-size:1.2rem; }
-        .msg-preview { padding:14px; border:1px solid #eee; border-radius:10px; margin-bottom:10px; border-left:4px solid #667eea; }
-        .msg-preview.unread { border-left-color:#e74c3c; background:#fff9f9; }
+        .no-bookings { text-align:center; padding:36px; color:#aaa; }
+        .no-bookings i { font-size:2.5rem; margin-bottom:12px; display:block; }
+
+        .quick-actions { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+        .quick-btn { display:flex; align-items:center; gap:7px; padding:11px 16px; background:white; border-radius:12px; box-shadow:0 3px 12px rgba(0,0,0,0.07); text-decoration:none; color:#333; font-weight:600; transition:all 0.2s; border:2px solid transparent; font-size:0.88rem; }
+        .quick-btn:hover { border-color:var(--primary); color:var(--primary); }
+        .quick-btn i { color:var(--primary); }
+        .quick-btn.danger { color:#e74c3c; }
+        .quick-btn.danger i { color:#e74c3c; }
+
+        /* Requests / Job Board */
+        .request-card { border:1px solid #e8ecff; border-radius:12px; padding:14px; margin-bottom:10px; background:#fafbff; }
+        .request-card .req-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; }
+        .request-card .req-title { font-weight:600; color:#333; font-size:0.92rem; }
+        .request-card .req-cat { background:rgba(102,126,234,0.1); color:var(--primary); font-size:0.72rem; padding:2px 8px; border-radius:10px; font-weight:600; }
+        .request-card .req-desc { color:#666; font-size:0.82rem; margin-bottom:8px; line-height:1.5; }
+        .request-card .req-meta { display:flex; gap:14px; color:#aaa; font-size:0.76rem; flex-wrap:wrap; }
+        .req-actions { display:flex; gap:8px; margin-top:10px; }
+        .btn-sm { padding:7px 14px; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; }
+        .btn-primary-sm { background:var(--gradient); color:white; }
+        .btn-outline-sm { background:white; color:var(--primary); border:1.5px solid var(--primary); }
+
+        /* FAB — "+" button */
+        .fab { position:fixed; bottom:24px; right:24px; width:58px; height:58px; background:var(--gradient); border-radius:50%; border:none; color:white; font-size:1.6rem; cursor:pointer; box-shadow:0 6px 20px rgba(102,126,234,0.5); z-index:300; display:flex; align-items:center; justify-content:center; transition:transform 0.2s; }
+        .fab:hover { transform:scale(1.1); }
+        .fab-tooltip { position:fixed; bottom:90px; right:24px; background:#333; color:white; font-size:0.78rem; padding:5px 10px; border-radius:8px; z-index:300; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+        .fab:hover + .fab-tooltip { opacity:1; }
+
+        /* Post Problem Modal */
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2000; align-items:flex-end; justify-content:center; }
+        @media(min-width:600px){ .modal-overlay { align-items:center; } }
+        .modal-overlay.show { display:flex; }
+        .modal-box { background:white; border-radius:20px 20px 0 0; padding:26px 20px; width:100%; max-width:500px; max-height:90vh; overflow-y:auto; position:relative; }
+        @media(min-width:600px){ .modal-box { border-radius:20px; } }
+        .modal-close { position:absolute; top:14px; right:16px; font-size:1.4rem; cursor:pointer; color:#aaa; background:none; border:none; }
+        .modal-title { font-size:1.2rem; font-weight:700; color:#333; margin-bottom:16px; }
+        .form-group { margin-bottom:14px; }
+        .form-group label { display:block; font-size:0.8rem; font-weight:600; color:#555; margin-bottom:4px; text-transform:uppercase; }
+        .form-group input, .form-group textarea, .form-group select { width:100%; padding:10px 12px; border:2px solid #e0e0e0; border-radius:10px; font-size:0.92rem; transition:border-color 0.2s; font-family:inherit; background:white; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--primary); outline:none; }
+        .submit-btn { width:100%; padding:13px; background:var(--gradient); color:white; border:none; border-radius:12px; font-size:0.98rem; font-weight:700; cursor:pointer; }
+        .submit-btn:hover { opacity:0.9; }
+
+        .alert { position:fixed; top:70px; right:14px; left:14px; padding:13px 16px; border-radius:12px; display:none; font-size:0.9rem; z-index:999; box-shadow:0 4px 15px rgba(0,0,0,0.15); }
+        @media(min-width:500px){ .alert { left:auto; max-width:340px; } }
+        .alert-error { background:#fff0f0; color:#cc0000; border:1px solid #ffcccc; }
+        .alert-success { background:#f0fff0; color:#006600; border:1px solid #aaddaa; }
+
+        @media(max-width:768px){ #navLinks { display:none; } .hamburger { display:flex; } }
     </style>
 </head>
 <body>
 <nav>
     <a href="index.html" class="nav-brand">
         <img src="logo.jpeg" alt="SewaSathi">
-        <div class="nav-brand-text">
-            <span class="name">SewaSathi</span>
-            <span class="slogan">मात्र एक कलमा, सेवा घर घरमा</span>
-        </div>
+        <div class="nav-brand-text"><span class="name">SewaSathi</span><span class="slogan">मात्र एक कलमा, सेवा घर घरमा</span></div>
     </a>
     <div id="navLinks"></div>
+    <div class="hamburger" onclick="document.getElementById('mobileNavD').classList.toggle('open')">
+        <span></span><span></span><span></span>
+    </div>
 </nav>
+<div class="mobile-nav" id="mobileNavD">
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="messages.html">Messages</a>
+    <a href="#" onclick="logout()">Logout</a>
+</div>
+
+<div id="alertMessage" class="alert"></div>
 
 <div class="hero">
-    <div style="max-width:1100px;margin:0 auto;">
+    <div style="max-width:1000px;margin:0 auto;">
         <h1 id="welcomeMsg">Welcome!</h1>
-        <p id="welcomeSub" style="opacity:0.85;margin-top:6px;"></p>
+        <p id="welcomeSub"></p>
     </div>
 </div>
 
 <div class="container">
     <div class="stats">
-        <div class="stat-card">
-            <div class="icon"><i class="fas fa-calendar-check"></i></div>
-            <div class="number" id="totalBookings">—</div>
-            <h3>Total Bookings</h3>
-        </div>
-        <div class="stat-card">
-            <div class="icon"><i class="fas fa-check-circle"></i></div>
-            <div class="number" id="completedBookings">—</div>
-            <h3>Completed</h3>
-        </div>
-        <div class="stat-card">
-            <div class="icon"><i class="fas fa-clock"></i></div>
-            <div class="number" id="pendingBookings">—</div>
-            <h3>Pending</h3>
-        </div>
-        <div class="stat-card" onclick="window.location.href='messages.html'">
-            <div class="icon"><i class="fas fa-envelope"></i></div>
-            <div class="number" id="unreadMessages">—</div>
-            <h3>Unread Messages</h3>
-        </div>
+        <div class="stat-card"><div class="icon"><i class="fas fa-calendar-check"></i></div><div class="number" id="totalBookings">—</div><h3>Bookings</h3></div>
+        <div class="stat-card"><div class="icon"><i class="fas fa-check-circle"></i></div><div class="number" id="completedBookings">—</div><h3>Done</h3></div>
+        <div class="stat-card"><div class="icon"><i class="fas fa-clock"></i></div><div class="number" id="pendingBookings">—</div><h3>Pending</h3></div>
+        <div class="stat-card" onclick="window.location.href='messages.html'"><div class="icon"><i class="fas fa-envelope"></i></div><div class="number" id="unreadMessages">—</div><h3>Messages</h3></div>
     </div>
 
     <div class="quick-actions">
         <a href="services.html" class="quick-btn"><i class="fas fa-search"></i> Find Services</a>
         <a href="messages.html" class="quick-btn"><i class="fas fa-envelope"></i> Messages</a>
-        <a href="#" onclick="logout()" class="quick-btn" style="color:#e74c3c;"><i class="fas fa-sign-out-alt" style="color:#e74c3c;"></i> Logout</a>
+        <a href="#" onclick="logout()" class="quick-btn danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
-    <div class="section" style="margin-bottom:22px;">
-        <h2><i class="fas fa-user" style="color:#667eea;margin-right:8px;"></i>My Profile</h2>
+    <!-- Job Requests Board -->
+    <div class="section">
+        <h2><i class="fas fa-clipboard-list" style="color:var(--primary);margin-right:8px;"></i>Job Requests Board</h2>
+        <p style="color:#888;font-size:0.84rem;margin-bottom:14px;">Posted problems — workers can apply for these jobs</p>
+        <div id="requestsBoard"><div style="text-align:center;padding:30px;color:#bbb;"><i class="fas fa-circle-notch fa-spin" style="font-size:1.5rem;"></i></div></div>
+    </div>
+
+    <div class="section">
+        <h2><i class="fas fa-user" style="color:var(--primary);margin-right:8px;"></i>My Profile</h2>
         <div class="profile-grid" id="profileGrid"><p style="color:#aaa;">Loading...</p></div>
     </div>
 
     <div class="section">
-        <h2><i class="fas fa-calendar-check" style="color:#667eea;margin-right:8px;"></i>My Bookings</h2>
+        <h2><i class="fas fa-calendar-check" style="color:var(--primary);margin-right:8px;"></i>My Bookings</h2>
         <div id="bookingsList"><div class="no-bookings"><i class="fas fa-circle-notch fa-spin"></i></div></div>
-        <div style="margin-top:18px;text-align:center;">
-            <a href="services.html" class="btn"><i class="fas fa-search"></i> Find Services</a>
+        <div style="margin-top:14px;text-align:center;">
+            <a href="services.html" style="background:var(--gradient);color:white;padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:600;font-size:0.9rem;"><i class="fas fa-search"></i> Find Services</a>
         </div>
+    </div>
+</div>
+
+<!-- FAB button (only for customers) -->
+<button class="fab" id="fabBtn" onclick="openPostModal()" title="Post a Problem">+</button>
+<div class="fab-tooltip">Post a Job Request</div>
+
+<!-- Post Problem Modal -->
+<div class="modal-overlay" id="postModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closePostModal()">&times;</button>
+        <div class="modal-title"><i class="fas fa-plus-circle" style="color:var(--primary);margin-right:8px;"></i>Post a Job Request</div>
+        <p style="color:#888;font-size:0.84rem;margin-bottom:16px;">Describe your problem and let workers apply for your job.</p>
+        <div class="form-group">
+            <label>Title *</label>
+            <input type="text" id="reqTitle" placeholder="e.g. Need a plumber for leak repair">
+        </div>
+        <div class="form-group">
+            <label>Category *</label>
+            <select id="reqCategory">
+                <option value="">Select category</option>
+                <option value="plumbing">Plumbing</option>
+                <option value="electrical">Electrical</option>
+                <option value="painting">Painting</option>
+                <option value="cleaning">Cleaning / Housemaid</option>
+                <option value="carpentry">Carpentry</option>
+                <option value="health">Health</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Description *</label>
+            <textarea id="reqDesc" rows="3" placeholder="Describe the problem in detail..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="reqLocation" placeholder="Your city or area">
+        </div>
+        <div class="form-group">
+            <label>Urgency</label>
+            <select id="reqUrgency">
+                <option value="normal">Normal</option>
+                <option value="urgent">Urgent</option>
+                <option value="flexible">Flexible</option>
+            </select>
+        </div>
+        <button class="submit-btn" onclick="submitRequest()"><i class="fas fa-paper-plane"></i> Post Request</button>
     </div>
 </div>
 
@@ -126,11 +227,13 @@ document.getElementById('welcomeSub').textContent = user.role === 'worker'
     ? 'Worker Dashboard — manage your booking requests'
     : 'Customer Dashboard — track your bookings';
 
+// Only show FAB for customers
+if (user.role !== 'customer') document.getElementById('fabBtn').style.display = 'none';
+
 function renderProfile() {
     const items = [
         { label:'Full Name', value: user.name },
-        { label:'Email', value: user.email },
-        { label:'Phone', value: user.phone || '—' },
+        { label:'Phone', value: user.phone ? '+977 ' + user.phone : '—' },
         { label:'City', value: user.city || '—' },
         { label:'Role', value: `<span class="badge badge-${user.role}">${user.role}</span>` },
         { label:'Member Since', value: user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '—' }
@@ -138,8 +241,7 @@ function renderProfile() {
     if (user.role === 'worker') {
         items.push(
             { label:'Profession', value: user.profession || '—' },
-            { label:'Experience', value: user.experience ? user.experience + ' years' : '—' },
-            { label:'Hourly Rate', value: user.hourlyRate ? 'Rs. ' + user.hourlyRate : '—' }
+            { label:'Experience', value: user.experience ? user.experience + ' years' : '—' }
         );
     }
     document.getElementById('profileGrid').innerHTML = items.map(item =>
@@ -147,31 +249,91 @@ function renderProfile() {
     ).join('');
 }
 
+// ── Job Requests Board ──────────────────────────────────────
+// Stored in localStorage for demo (production: MongoDB collection)
+function getRequests() {
+    try { return JSON.parse(localStorage.getItem('ss_requests') || '[]'); } catch(e){ return []; }
+}
+function saveRequests(r) { localStorage.setItem('ss_requests', JSON.stringify(r)); }
+
+function renderRequests() {
+    const board = document.getElementById('requestsBoard');
+    const reqs = getRequests();
+    if (reqs.length === 0) {
+        board.innerHTML = '<div style="text-align:center;padding:30px;color:#bbb;"><i class="fas fa-inbox" style="font-size:2rem;margin-bottom:10px;display:block;"></i>No job requests yet.<br><small>Customers can post problems using the <strong>+</strong> button.</small></div>';
+        return;
+    }
+    const catColors = { plumbing:'#e3f2fd', electrical:'#fff9c4', painting:'#fce4ec', cleaning:'#e8f5e9', carpentry:'#fff3e0', health:'#f3e5f5', other:'#f5f5f5' };
+    board.innerHTML = reqs.slice().reverse().map((r, i) => `
+        <div class="request-card">
+            <div class="req-header">
+                <div class="req-title">${r.title}</div>
+                <span class="req-cat" style="background:${catColors[r.category]||'#f0f0f0'}">${r.category}</span>
+            </div>
+            <div class="req-desc">${r.description}</div>
+            <div class="req-meta">
+                <span><i class="fas fa-map-marker-alt"></i> ${r.location || 'Nepal'}</span>
+                <span><i class="fas fa-clock"></i> ${r.urgency || 'normal'}</span>
+                <span><i class="fas fa-user"></i> ${r.postedBy || 'Anonymous'}</span>
+                <span><i class="fas fa-calendar"></i> ${new Date(r.postedAt).toLocaleDateString()}</span>
+            </div>
+            ${user.role === 'worker' ? `<div class="req-actions"><button class="btn-sm btn-primary-sm" onclick="applyForJob(${reqs.length - 1 - i})"><i class="fas fa-hand-paper"></i> Apply</button></div>` : ''}
+        </div>
+    `).join('');
+}
+
+function applyForJob(idx) {
+    const reqs = getRequests();
+    const req = reqs[idx];
+    if (!req) return;
+    showAlert('Applied for: ' + req.title + '! The customer will be notified.', 'success');
+    // In production: POST /api/requests/:id/apply
+}
+
+function openPostModal() { document.getElementById('postModal').classList.add('show'); }
+function closePostModal() { document.getElementById('postModal').classList.remove('show'); }
+document.getElementById('postModal').addEventListener('click', e => { if (e.target.id==='postModal') closePostModal(); });
+
+function submitRequest() {
+    const title = document.getElementById('reqTitle').value.trim();
+    const category = document.getElementById('reqCategory').value;
+    const description = document.getElementById('reqDesc').value.trim();
+    const location = document.getElementById('reqLocation').value.trim();
+    const urgency = document.getElementById('reqUrgency').value;
+    if (!title || !category || !description) { showAlert('Please fill title, category and description.', 'error'); return; }
+    const reqs = getRequests();
+    reqs.push({ title, category, description, location, urgency, postedBy: user.name, postedAt: new Date().toISOString() });
+    saveRequests(reqs);
+    closePostModal();
+    showAlert('Job request posted! Workers can now see and apply.', 'success');
+    renderRequests();
+    // Clear form
+    document.getElementById('reqTitle').value = '';
+    document.getElementById('reqCategory').value = '';
+    document.getElementById('reqDesc').value = '';
+    document.getElementById('reqLocation').value = '';
+}
+
 async function loadBookings() {
     try {
         const endpoint = user.role === 'worker' ? '/bookings/worker-bookings' : '/bookings/my';
         const { ok, data } = await apiCall('GET', endpoint);
         const bookings = (ok && data.success) ? data.data : [];
-
-        document.getElementById('totalBookings').textContent     = bookings.length;
+        document.getElementById('totalBookings').textContent = bookings.length;
         document.getElementById('completedBookings').textContent = bookings.filter(b => b.status === 'completed').length;
-        document.getElementById('pendingBookings').textContent   = bookings.filter(b => b.status === 'pending').length;
-
+        document.getElementById('pendingBookings').textContent = bookings.filter(b => b.status === 'pending').length;
         const list = document.getElementById('bookingsList');
         if (bookings.length === 0) {
-            list.innerHTML = `<div class="no-bookings"><i class="fas fa-calendar-times"></i>No bookings yet.<br><br><a href="services.html" class="btn" style="display:inline-block;margin-top:10px;">Find a Service</a></div>`;
+            list.innerHTML = `<div class="no-bookings"><i class="fas fa-calendar-times"></i>No bookings yet.<br><a href="services.html" style="display:inline-block;margin-top:10px;background:var(--gradient);color:white;padding:8px 20px;border-radius:10px;text-decoration:none;font-size:0.88rem;">Find a Service</a></div>`;
         } else {
             list.innerHTML = bookings.map(b => {
-                const otherPerson = user.role === 'worker'
-                    ? (b.customerId?.name || 'Customer')
-                    : (b.workerId?.name || 'Worker');
-                const otherLabel = user.role === 'worker' ? 'Customer' : 'Worker';
-                return `
-                <div class="booking-item">
+                const other = user.role === 'worker' ? (b.customerId?.name||'Customer') : (b.workerId?.name||'Worker');
+                const lbl = user.role === 'worker' ? 'Customer' : 'Worker';
+                return `<div class="booking-item">
                     <div class="booking-info">
-                        <strong><i class="fas fa-user"></i> ${otherLabel}: ${otherPerson}</strong>
-                        <small>${new Date(b.bookingDate).toLocaleDateString('en-NP')} ${b.address ? '| ' + b.address.substring(0,40) + (b.address.length>40?'...':'') : ''}</small>
-                        ${b.notes ? `<small style="display:block;color:#888;">Note: ${b.notes}</small>` : ''}
+                        <strong>${lbl}: ${other}</strong>
+                        <small>${new Date(b.bookingDate).toLocaleDateString('en-NP')} ${b.address ? '• ' + b.address.substring(0,40) + (b.address.length>40?'...':'') : ''}</small>
+                        ${b.notes ? `<small>Note: ${b.notes}</small>` : ''}
                     </div>
                     <span class="status-badge status-${b.status}">${b.status}</span>
                 </div>`;
@@ -179,9 +341,7 @@ async function loadBookings() {
         }
     } catch(err) {
         document.getElementById('bookingsList').innerHTML = `<div class="no-bookings"><i class="fas fa-exclamation-circle"></i>Could not load bookings. Is the server running?</div>`;
-        document.getElementById('totalBookings').textContent = '0';
-        document.getElementById('completedBookings').textContent = '0';
-        document.getElementById('pendingBookings').textContent = '0';
+        ['totalBookings','completedBookings','pendingBookings'].forEach(id => document.getElementById(id).textContent = '0');
     }
 }
 
@@ -190,17 +350,13 @@ async function loadUnreadMessages() {
         const endpoint = user.role === 'worker' ? '/bookings/messages' : '/bookings/customer-messages';
         const { ok, data } = await apiCall('GET', endpoint);
         if (ok && data.success) {
-            const unread = data.data.filter(m => !m.isRead).length;
-            document.getElementById('unreadMessages').textContent = unread;
-        } else {
-            document.getElementById('unreadMessages').textContent = '0';
-        }
-    } catch(e) {
-        document.getElementById('unreadMessages').textContent = '—';
-    }
+            document.getElementById('unreadMessages').textContent = data.data.filter(m => !m.isRead).length;
+        } else { document.getElementById('unreadMessages').textContent = '0'; }
+    } catch(e) { document.getElementById('unreadMessages').textContent = '—'; }
 }
 
 renderProfile();
+renderRequests();
 loadBookings();
 loadUnreadMessages();
 </script>

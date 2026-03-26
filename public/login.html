@@ -10,47 +10,90 @@
         body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#667eea,#764ba2); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
         .card { background:white; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); width:100%; max-width:440px; padding:40px; }
         .logo { text-align:center; margin-bottom:30px; }
-        .logo i { font-size:3rem; color:#667eea; }
-        .logo h2 { font-size:1.8rem; color:#333; margin-top:10px; }
-        .logo p { color:#888; margin-top:5px; }
+        .logo img { height:64px; border-radius:10px; box-shadow:0 4px 12px rgba(102,126,234,0.2); margin-bottom:8px; }
+        .logo h2 { font-size:1.8rem; color:#333; }
+        .logo p { color:#764ba2; font-style:italic; font-size:0.85rem; margin-top:4px; }
+        .tab-toggle { display:flex; background:#f4f6fb; border-radius:10px; padding:4px; margin-bottom:24px; }
+        .tab-toggle button { flex:1; padding:10px; border:none; border-radius:8px; cursor:pointer; font-size:0.9rem; font-weight:600; color:#888; background:transparent; transition:all 0.2s; }
+        .tab-toggle button.active { background:white; color:#667eea; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+        .phone-row { display:flex; gap:8px; align-items:flex-end; }
+        .country-code { background:#f4f6fb; border:2px solid #e0e0e0; border-radius:10px; padding:13px 12px; font-size:0.95rem; font-weight:600; color:#333; white-space:nowrap; display:flex; align-items:center; gap:6px; }
         .form-group { margin-bottom:18px; position:relative; }
         .form-group i.icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#667eea; }
         .form-group input { width:100%; padding:14px 14px 14px 42px; border:2px solid #e0e0e0; border-radius:10px; font-size:1rem; transition:border-color 0.2s; }
         .form-group input:focus { border-color:#667eea; outline:none; }
-        .btn { width:100%; padding:14px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; border-radius:10px; font-size:1.1rem; font-weight:600; cursor:pointer; margin-top:8px; transition:opacity 0.2s; }
+        .btn { width:100%; padding:14px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; border-radius:10px; font-size:1.05rem; font-weight:600; cursor:pointer; margin-top:8px; transition:opacity 0.2s; }
         .btn:hover { opacity:0.9; }
         .btn:disabled { opacity:0.6; cursor:not-allowed; }
+        .otp-inputs { display:flex; gap:10px; justify-content:center; margin:20px 0; }
+        .otp-inputs input { width:48px; height:56px; text-align:center; font-size:1.4rem; font-weight:700; border:2px solid #e0e0e0; border-radius:10px; transition:border-color 0.2s; }
+        .otp-inputs input:focus { border-color:#667eea; outline:none; }
+        .simulated-otp { background:#fffbe6; border:1px dashed #ffc107; border-radius:8px; padding:10px 14px; text-align:center; font-size:0.85rem; color:#856404; margin-bottom:14px; }
         .links { text-align:center; margin-top:20px; color:#666; }
         .links a { color:#667eea; text-decoration:none; font-weight:500; }
-        .links a:hover { text-decoration:underline; }
         .alert { padding:12px 15px; border-radius:10px; margin-bottom:18px; display:none; font-size:0.95rem; }
         .alert-error { background:#fff0f0; color:#cc0000; border:1px solid #ffcccc; }
         .alert-success { background:#f0fff0; color:#006600; border:1px solid #aaddaa; }
         .back { display:inline-block; margin-bottom:20px; color:#667eea; text-decoration:none; font-size:0.9rem; }
+        .login-panel { display:none; }
+        .login-panel.active { display:block; }
     </style>
 </head>
 <body>
 <div class="card">
     <a href="index.html" class="back"><i class="fas fa-arrow-left"></i> Back to Home</a>
     <div class="logo">
-        <img src="logo.jpeg" alt="SewaSathi" style="height:64px;border-radius:10px;margin-bottom:8px;box-shadow:0 4px 12px rgba(102,126,234,0.2);">
+        <img src="logo.jpeg" alt="SewaSathi">
         <h2>Welcome Back!</h2>
-        <p style="font-style:italic;color:#764ba2;font-size:0.85rem;">मात्र एक कलमा, सेवा घर घरमा</p>
+        <p>मात्र एक कलमा, सेवा घर घरमा</p>
+    </div>
+    <div class="tab-toggle">
+        <button class="active" onclick="switchTab('password', this)"><i class="fas fa-lock"></i> Password</button>
+        <button onclick="switchTab('otp', this)"><i class="fas fa-mobile-alt"></i> OTP Login</button>
     </div>
     <div id="alertMessage" class="alert"></div>
-    <form id="loginForm">
+
+    <!-- Password Login -->
+    <div class="login-panel active" id="panel-password">
         <div class="form-group">
             <i class="fas fa-envelope icon"></i>
-            <input type="email" name="email" placeholder="Email Address" required autocomplete="email">
+            <input type="email" id="loginEmail" placeholder="Email Address" autocomplete="email">
         </div>
         <div class="form-group">
             <i class="fas fa-lock icon"></i>
-            <input type="password" name="password" placeholder="Password" required autocomplete="current-password">
+            <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password">
         </div>
-        <button type="submit" class="btn" id="loginBtn">
-            <i class="fas fa-sign-in-alt"></i> Login
-        </button>
-    </form>
+        <button class="btn" onclick="loginWithPassword()"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </div>
+
+    <!-- OTP Login -->
+    <div class="login-panel" id="panel-otp">
+        <div id="otpStep1Login">
+            <p style="color:#888;font-size:0.88rem;margin-bottom:14px;">Enter your registered phone number</p>
+            <div class="phone-row">
+                <div class="country-code"><img src="https://flagcdn.com/w20/np.png" alt="NP" style="height:14px;"> +977</div>
+                <div class="form-group" style="flex:1;margin-bottom:0;">
+                    <i class="fas fa-phone icon"></i>
+                    <input type="tel" id="otpPhone" placeholder="98XXXXXXXX" maxlength="10" inputmode="numeric">
+                </div>
+            </div>
+            <button class="btn" style="margin-top:14px;" onclick="sendLoginOTP()"><i class="fas fa-paper-plane"></i> Send OTP</button>
+        </div>
+        <div id="otpStep2Login" style="display:none;">
+            <div id="loginSimOTP" class="simulated-otp" style="display:none;"></div>
+            <p style="text-align:center;color:#888;font-size:0.88rem;margin-bottom:10px;">Enter the 6-digit OTP</p>
+            <div class="otp-inputs">
+                <input type="text" maxlength="1" class="login-otp-digit" inputmode="numeric">
+                <input type="text" maxlength="1" class="login-otp-digit" inputmode="numeric">
+                <input type="text" maxlength="1" class="login-otp-digit" inputmode="numeric">
+                <input type="text" maxlength="1" class="login-otp-digit" inputmode="numeric">
+                <input type="text" maxlength="1" class="login-otp-digit" inputmode="numeric">
+                <input type="text" maxlength="1" class="login-otp-digit" inputmode="numeric">
+            </div>
+            <button class="btn" onclick="loginWithOTP()"><i class="fas fa-check-circle"></i> Verify & Login</button>
+        </div>
+    </div>
+
     <div class="links">
         Don't have an account? <a href="register.html">Sign up here</a>
     </div>
@@ -58,37 +101,76 @@
 
 <script src="app.js"></script>
 <script>
-    // If already logged in, redirect
     if (isLoggedIn()) window.location.href = 'dashboard.html';
 
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('loginBtn');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+    let loginOTPPhone = '';
+    let loginOTPCode = '';
 
-        const email    = this.email.value.trim();
-        const password = this.password.value;
+    function switchTab(type, btn) {
+        document.querySelectorAll('.login-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('panel-' + type).classList.add('active');
+        document.querySelectorAll('.tab-toggle button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
 
+    document.querySelectorAll('.login-otp-digit').forEach((input, i, arr) => {
+        input.addEventListener('input', () => {
+            input.value = input.value.replace(/\D/,'');
+            if (input.value && i < arr.length - 1) arr[i+1].focus();
+        });
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !input.value && i > 0) arr[i-1].focus();
+        });
+    });
+
+    async function loginWithPassword() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPw').value;
+        if (!email || !password) { showAlert('Please fill all fields.', 'error'); return; }
         try {
             const { ok, data } = await apiCall('POST', '/auth/login', { email, password });
-
             if (ok && data.success) {
-                // API returns: { success:true, data:{ user, token } }
                 saveAuth(data.data.token, data.data.user);
-                showAlert('Login successful! Redirecting...', 'success');
+                showAlert('Login successful!', 'success');
                 setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
             } else {
                 showAlert(data.message || 'Invalid email or password.', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
             }
-        } catch (err) {
-            showAlert('Cannot reach server. Make sure the backend is running on port 5000.', 'error');
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        } catch(err) {
+            showAlert('Cannot reach server.', 'error');
         }
-    });
+    }
+
+    function sendLoginOTP() {
+        const phone = document.getElementById('otpPhone').value.trim();
+        if (!validateNepalPhone(phone)) { showAlert('Enter a valid 10-digit phone number.', 'error'); return; }
+        loginOTPPhone = phone;
+        loginOTPCode = generateOTP();
+        storeOTP(phone, loginOTPCode);
+        document.getElementById('loginSimOTP').textContent = '🔐 Demo OTP: ' + loginOTPCode;
+        document.getElementById('loginSimOTP').style.display = 'block';
+        document.getElementById('otpStep1Login').style.display = 'none';
+        document.getElementById('otpStep2Login').style.display = 'block';
+        showAlert('OTP sent to +977 ' + phone, 'success');
+    }
+
+    async function loginWithOTP() {
+        const digits = [...document.querySelectorAll('.login-otp-digit')].map(i => i.value).join('');
+        if (digits.length < 6) { showAlert('Enter all 6 digits.', 'error'); return; }
+        if (!verifyOTP(loginOTPPhone, digits)) { showAlert('Invalid or expired OTP.', 'error'); return; }
+        try {
+            const { ok, data } = await apiCall('POST', '/auth/login-phone', { phone: loginOTPPhone });
+            if (ok && data.success) {
+                saveAuth(data.data.token, data.data.user);
+                showAlert('Login successful!', 'success');
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+            } else {
+                showAlert(data.message || 'Phone not registered. Please sign up.', 'error');
+            }
+        } catch(err) {
+            showAlert('Cannot reach server.', 'error');
+        }
+    }
 </script>
 </body>
 </html>
