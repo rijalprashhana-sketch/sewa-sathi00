@@ -37,8 +37,10 @@ app.use('/api/users',    userRoutes);
 const path = require('path');
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Health check
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '..', 'public', 'index.html')));
+// Catch-all: serve index.html for any unknown route
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
 
 // Get all workers, optionally filter by ?category=
 app.get('/api/workers', async (req, res) => {
