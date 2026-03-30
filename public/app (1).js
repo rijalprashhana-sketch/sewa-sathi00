@@ -1,7 +1,7 @@
 // ============================================================
-// SewaSathi v10 - Main App JS
+// SewaSathi - Main App JS
 // ============================================================
-const API = 'http://localhost:5000/api';
+const API = '/api';
 
 function getToken() { return localStorage.getItem('ss_token'); }
 function getUser()  { try { return JSON.parse(localStorage.getItem('ss_user')); } catch(e){ return null; } }
@@ -35,30 +35,6 @@ function showAlert(msg, type = 'success') {
     el.textContent = msg;
     el.style.display = 'block';
     setTimeout(() => { el.style.display = 'none'; }, 4500);
-}
-
-// Phone validation: must be exactly 10 digits
-function validateNepalPhone(phone) {
-    return /^\d{10}$/.test(phone.trim());
-}
-
-// Generate a 6-digit OTP (simulated — in production send via SMS)
-function generateOTP() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
-// OTP session storage (in-memory for demo; production: server-side)
-window._otpStore = {};
-
-function storeOTP(phone, otp) {
-    window._otpStore[phone] = { otp, expires: Date.now() + 5 * 60 * 1000 }; // 5 min
-}
-
-function verifyOTP(phone, otp) {
-    const record = window._otpStore[phone];
-    if (!record) return false;
-    if (Date.now() > record.expires) return false;
-    return record.otp === otp;
 }
 
 function buildNav() {

@@ -91,7 +91,7 @@ class ChatWidget {
 
     async checkUnreadMessages() {
         try {
-            const response = await fetch(`http://localhost:5000/api/chat/unread/${this.currentUserId}`);
+            const response = await fetch(`/api/chat/unread/${this.currentUserId}`);
             const data = await response.json();
             this.unreadCount = data.unreadCount;
             this.updateBadge();
@@ -126,7 +126,7 @@ class ChatWidget {
 
     async loadConversations() {
         try {
-            const response = await fetch(`http://localhost:5000/api/chat/conversations/${this.currentUserId}`);
+            const response = await fetch(`/api/chat/conversations/${this.currentUserId}`);
             const conversations = await response.json();
             this.displayConversations(conversations);
         } catch (error) {
@@ -181,7 +181,7 @@ class ChatWidget {
 
     async loadMessages(userId) {
         try {
-            const response = await fetch(`http://localhost:5000/api/chat/conversation/${this.currentUserId}/${userId}`);
+            const response = await fetch(`/api/chat/conversation/${this.currentUserId}/${userId}`);
             const messages = await response.json();
             this.displayMessages(messages);
         } catch (error) {
@@ -224,7 +224,7 @@ class ChatWidget {
         container.scrollTop = container.scrollHeight;
 
         try {
-            const response = await fetch('http://localhost:5000/api/chat/send', {
+            const response = await fetch('/api/chat/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
