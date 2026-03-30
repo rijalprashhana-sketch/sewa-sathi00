@@ -38,7 +38,7 @@ const path = require('path');
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Health check
-app.get('/', (req, res) => res.json({ message: 'SewaSathi API running' }));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '..', 'public', 'index.html')));
 
 // Get all workers, optionally filter by ?category=
 app.get('/api/workers', async (req, res) => {
